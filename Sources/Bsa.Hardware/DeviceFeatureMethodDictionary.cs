@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -60,7 +60,7 @@ namespace Bsa.Hardware
                 method = _device.GetType().GetMethod(String.Format(_methodNameFormatString, feature.EquivalentName),
                     BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
 
-                if (method.GetParameters().Length != 0 || method.ReturnType != typeof(bool))
+                if (method != null && (method.GetParameters().Length != 0 || method.ReturnType != typeof(bool)))
                     method = null;
 
                 _mapping.Add(feature, method);

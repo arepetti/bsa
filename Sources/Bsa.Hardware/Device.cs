@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -21,7 +21,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Bsa.Instrumentation;
-using System.Reflection;
 
 namespace Bsa.Hardware
 {
@@ -109,6 +108,8 @@ namespace Bsa.Hardware
             }
 
             Status = DeviceConnectionStatus.Connecting;
+            OnConnecting();
+
             ReliabilityHelpers.ExecuteAndRetryOnError(
                 () =>
                 {
@@ -124,9 +125,10 @@ namespace Bsa.Hardware
                     Status = DeviceConnectionStatus.Error;
                 }
             );
-            
-            Status = DeviceConnectionStatus.Connected;
+
             Telemetry.Increment(DeviceTelemetry.NumberOfSuccessfulConnections, 1);
+            Status = DeviceConnectionStatus.Connected;
+            OnConnected();
         }
 
         /// <summary>
@@ -149,6 +151,7 @@ namespace Bsa.Hardware
             }
 
             Status = DeviceConnectionStatus.Disconnecting;
+            OnDisconnecting();
 
             try
             {
@@ -162,8 +165,30 @@ namespace Bsa.Hardware
                 throw;
             }
 
-            // In case of error we do not go in "error state" but we consider device as disconnected
+            // In case of error we do not go in "error state" but we consider device as disconnected (if exception
+            // is handled elsewhere).
             Status = DeviceConnectionStatus.Disconnected;
+            OnDisconnected();
+        }
+
+        /// <summary>
+        /// Disconnect from acquisition device and connect again.
+        /// </summary>
+        /// <exception cref="HardwareException">
+        /// If device is not actually connected.
+        /// <br/>-or-<br/>
+        /// If there has been an error during reconnection (in disconnection or connection phases).
+        /// </exception>
+        public void Reconnect()
+        {
+            if (Status != DeviceConnectionStatus.Connected)
+            {
+                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.State,
+                    HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot reconnect while in {0} state.", Status)));
+            }
+
+            Disconnect();
+            Connect();
         }
 
         /// <summary>
@@ -186,6 +211,34 @@ namespace Bsa.Hardware
         /// This method <strong>must</strong> wrap all possible exceptions into <see cref="HardwareException"/>.
         /// </remarks>
         protected abstract void DisconnectCore();
+
+        /// <summary>
+        /// Function invoked just before the first attempt to connect to the device (<c>Status</c> is see <c>Connecting</c>).
+        /// </summary>
+        protected virtual void OnConnecting()
+        {
+        }
+
+        /// <summary>
+        /// Function invoked after a successful connection has been estabilished (<c>Status</c> is see <c>Connected</c>).
+        /// </summary>
+        protected virtual void OnConnected()
+        {
+        }
+
+        /// <summary>
+        /// Function invoked just before starting disconnection from the device (<c>Status</c> is see <c>Disconnecting</c>).
+        /// </summary>
+        protected virtual void OnDisconnecting()
+        {
+        }
+
+        /// <summary>
+        /// Function invoked after device has been disconnected without errors (<c>Status</c> is see <c>Disconnected</c>).
+        /// </summary>
+        protected virtual void OnDisconnected()
+        {
+        }
 
         /// <summary>
         /// Handles the specified set of errors.

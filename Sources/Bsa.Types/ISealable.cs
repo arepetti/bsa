@@ -17,17 +17,31 @@
 //
 
 using System;
-using Bsa.Instrumentation;
 
-namespace Bsa.Hardware
+namespace Bsa
 {
     /// <summary>
-    /// Contains the definition of the values instrumented for hardware telemetry.
+    /// Represents an object that can be <em>finalized</em> and made immutable.
     /// </summary>
-    public class DeviceTelemetry : WpcTelemetrySession
+    public interface ISealable
     {
-        public static readonly TelemetryData NumberOfSuccessfulConnections = new TelemetryData("BSA.Hardware.Device", "NumberOfSuccessfulConnections", TelemetryDataType.Count);
-        public static readonly TelemetryData NumberOfFailedConnections = new TelemetryData("BSA.Hardware.Device", "NumberOfFailedConnections", TelemetryDataType.Count);
-        public static readonly TelemetryData NumberOfErrors = new TelemetryData("BSA.Hardware.Device", "NumberOfErrors", TelemetryDataType.Count);
+        /// <summary>
+        /// Indicates whether this object has been sealed.
+        /// </summary>
+        /// <value>
+        /// <see langword="true"/> if this object has been sealed and it then cannot be further modified.
+        /// </value>
+        bool IsSealed
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Seal this object preventing any further modifcation.
+        /// </summary>
+        /// <remarks>
+        /// Changing an object after it has been sealed will throw <see cref="InvalidOperationException"/>.
+        /// </remarks>
+        void Seal();
     }
 }

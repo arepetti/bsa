@@ -17,17 +17,15 @@
 //
 
 using System;
-using Bsa.Instrumentation;
+using System.Collections.ObjectModel;
 
-namespace Bsa.Hardware
+namespace Bsa.Hardware.Acquisition
 {
     /// <summary>
-    /// Contains the definition of the values instrumented for hardware telemetry.
+    /// Represents a collection of <see cref="PhysicalChannel"/>.
     /// </summary>
-    public class DeviceTelemetry : WpcTelemetrySession
+    public sealed class PhysicalChannelCollection<T> : SealableCollection<T>
+        where T : PhysicalChannel
     {
-        public static readonly TelemetryData NumberOfSuccessfulConnections = new TelemetryData("BSA.Hardware.Device", "NumberOfSuccessfulConnections", TelemetryDataType.Count);
-        public static readonly TelemetryData NumberOfFailedConnections = new TelemetryData("BSA.Hardware.Device", "NumberOfFailedConnections", TelemetryDataType.Count);
-        public static readonly TelemetryData NumberOfErrors = new TelemetryData("BSA.Hardware.Device", "NumberOfErrors", TelemetryDataType.Count);
     }
 }

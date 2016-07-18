@@ -48,6 +48,9 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Acquisition\AcquisitionDevice.cs" />
+    <Compile Include="Acquisition\PhysicalChannel.cs" />
+    <Compile Include="Acquisition\PhysicalChannelCollection.cs" />
     <Compile Include="ComparisonExtensions.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DeviceConnectionStatus.cs" />

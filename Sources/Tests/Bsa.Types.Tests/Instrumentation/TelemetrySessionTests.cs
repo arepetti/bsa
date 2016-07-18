@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -46,7 +46,7 @@ namespace Bsa.Tests.Instrumentation
             using (var session = new TestableTelemetrySession())
             {
                 session.Start();
-                session.Increment(new TelemetryData("BSA.Tests", "Unexisting", TelemetryDataType.ElapsedTime));
+                session.Increment(new TelemetryData("BSA.Tests", "Unexisting", TelemetryDataType.ElapsedTime), 1);
             }
         }
 
@@ -56,14 +56,14 @@ namespace Bsa.Tests.Instrumentation
             using (var session = new TestableTelemetrySession())
             {
                 // Before Start() this increment will be ignored
-                session.Increment(TestableTelemetrySession.Counter1);
+                session.Increment(TestableTelemetrySession.Counter1, 1);
 
                 session.Start();
 
-                session.Increment(TestableTelemetrySession.Counter1);
+                session.Increment(TestableTelemetrySession.Counter1, 1);
                 Assert.AreEqual((int)ReadPerformanceCounter("BSA.Tests", "Counter1"), 1);
 
-                session.Increment(TestableTelemetrySession.Counter1);
+                session.Increment(TestableTelemetrySession.Counter1, 1);
                 Assert.AreEqual((int)ReadPerformanceCounter("BSA.Tests", "Counter1"), 2);
 
                 session.Increment(TestableTelemetrySession.Counter1, 2);

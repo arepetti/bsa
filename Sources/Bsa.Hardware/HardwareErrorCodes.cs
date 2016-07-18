@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -37,6 +37,28 @@ namespace Bsa.Hardware
         }
 
         /// <summary>
+        /// Containst constants for well-known internal errors.
+        /// </summary>
+        public static class Internal
+        {
+            /// <summary>
+            /// Driver performed an invalid or unexpected operation, this error is often caused by a programming error.
+            /// </summary>
+            public const ushort InvalidOperation = 0;
+        }
+
+        /// <summary>
+        /// Containst constants for well-known errors in drivers arguments/setup.
+        /// </summary>
+        public static class Arguments
+        {
+            /// <summary>
+            /// Supplied arguments or configuration for channels is not valid.
+            /// </summary>
+            public const ushort InvalidChannelConfiguration = 0;
+        }
+
+        /// <summary>
         /// Contains constants for well-known hardware errors for class <see cref="HardwareErrorClass.State"/>
         /// </summary>
         public static class State
@@ -45,6 +67,11 @@ namespace Bsa.Hardware
             /// Device (or driver) state cannot be changed (in this moment or for this configuration).
             /// </summary>
             public const ushort CannotChangeState = 0;
+
+            /// <summary>
+            /// An operation cannot be performed while driver/device is in the current state.
+            /// </summary>
+            public const ushort InvalidState = 1;
         }
     }
 }

@@ -23,7 +23,7 @@
     <DocumentationFile>bin\Debug\Bsa.Types.XML</DocumentationFile>
     <RunCodeAnalysis>true</RunCodeAnalysis>
     <CodeAnalysisRuleSet>BasicCorrectnessRules.ruleset</CodeAnalysisRuleSet>
-    <NoWarn>1591,2225</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -32,7 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <NoWarn>1591,2225</NoWarn>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,6 +50,8 @@
     <Compile Include="BsaException.cs" />
     <Compile Include="Design\IntervalTypeConverter.cs" />
     <Compile Include="Disposable.cs" />
+    <Compile Include="ISealable.cs" />
+    <Compile Include="Sealable.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Instrumentation\Instrumentable.cs" />
     <Compile Include="Instrumentation\NullTelemetrySession.cs" />
@@ -62,7 +64,10 @@
     <Compile Include="Instrumentation\WpcTelemetrySessionInstaller.cs" />
     <Compile Include="Interval.cs" />
     <Compile Include="IntervalCollection.cs" />
+    <Compile Include="LinqExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SealableCollection.cs" />
+    <Compile Include="SyncRoot.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\CustomDictionary.xml">

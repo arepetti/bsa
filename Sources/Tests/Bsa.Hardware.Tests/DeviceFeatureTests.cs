@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -96,9 +96,21 @@ namespace Bsa.Hardware.Tests
             }
         }
 
+        [TestMethod]
+        public void UseDefaultIfFeatureIsUnspecified()
+        {
+            using (var device = new DerivedTestDevice())
+            {
+                Assert.IsFalse(device.Features.IsAvailable(TestFeature3));
+                Assert.IsFalse(device.Features.IsEnabled(TestFeature3));
+                Assert.IsFalse(device.Features.IsAvailableAndEnabled(TestFeature3));
+            }
+        }
+
         private static readonly DeviceFeature TestFeature0 = new DeviceFeature(typeof(TestDevice), "0");
         private static readonly DeviceFeature TestFeature1 = new DeviceFeature(typeof(TestDevice), "1");
         private static readonly DeviceFeature TestFeature2 = new DeviceFeature(typeof(DerivedTestDevice), "2");
+        private static readonly DeviceFeature TestFeature3 = new DeviceFeature(typeof(DerivedTestDevice), "3");
 
         private class TestDevice : NonInstrumentedTestDevice
         {

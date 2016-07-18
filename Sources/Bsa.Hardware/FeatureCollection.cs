@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -33,7 +33,8 @@ namespace Bsa.Hardware
     /// <item>
     /// Method name must have prefix <c>IsFeature</c> followed by feature's equivalent name and then a suffix to indicate
     /// if method is used to determine whether a feature is available (<c>IsFeature*Available</c>) or enabled (<c>IsFeature*Enabled</c>).
-    /// Name matching is case insensitive.
+    /// Name matching is case insensitive. Some features require an additional method to peform a specific operation, in those cases
+    /// method signature is the same (with a <c>bool</c> return value which may be ignored) and name is <c>Perform*</c>.
     /// </item>
     /// <item>
     /// Derived classes may override base class method if it is virtual but overriding hiding base method signature is not supported.
@@ -50,6 +51,7 @@ namespace Bsa.Hardware
         {
             _methodsToCheckIfAvailable = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Available");
             _methodsToCheckIfEnabled = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Enabled");
+            _methodsToInvoke = new DeviceFeatureMethodDictionary(device, "Perform{0}");
         }
 
         /// <summary>
@@ -93,7 +95,8 @@ namespace Bsa.Hardware
         /// is enabled. This method check for availability (as default for this method) only if device does not provide
         /// a method to determine it. If, for example, an hypotetic device has a method <c>bool IsFeatureXyzEnabled() { return true; }</c>
         /// but it has not a complementary method <c>IsFeatureXyzAvailable</c> then, if caller does not check first for availability,
-        /// application behavior is undefined.
+        /// application behavior is undefined (or, better, use <see cref="IsAvailableAndEnabled"/> instead of this function which is designed to be
+        /// used when availability is checked once and if enabled is checked multiple times.)
         /// </remarks>
         public bool IsEnabled(DeviceFeature feature)
         {
@@ -104,7 +107,51 @@ namespace Bsa.Hardware
                 () => _methodsToCheckIfAvailable.Read(feature, () => false));
         }
 
+        /// <summary>
+        /// Combines the calls to <see cref="IsAvailable"/> and <see cref="IsEnabled"/>.
+        /// </summary>
+        /// <param name="feature">The feature you want to check.</param>
+        /// <returns>
+        /// <see langword="true"/> if specified feature is both available and enabled.
+        /// </returns>
+        public bool IsAvailableAndEnabled(DeviceFeature feature)
+        {
+            if (feature == null)
+                throw new ArgumentNullException("feature");
+
+            if (!_methodsToCheckIfAvailable.Read(feature, () => false))
+                return false;
+
+            return _methodsToCheckIfEnabled.Read(feature, () => false);
+        }
+
+        /// <summary>
+        /// Performs an operation related to a specific feature.
+        /// </summary>
+        /// <param name="feature">The feature you want to <em>perform</em>.</param>
+        /// <returns>
+        /// Return value is implementation defined, if required method is not present then this function
+        /// always return <see langword="false"/>.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If  <paramref name="feature"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If specified feature is not associated with device linked with this object (or to one of its derived classes).
+        /// </exception>
+        /// <remarks>
+        /// This method do not check if feature is available and enabled before attempting to perform specified operation.
+        /// </remarks>
+        public bool Perform(DeviceFeature feature)
+        {
+            if (feature == null)
+                throw new ArgumentNullException("feature");
+
+            return _methodsToInvoke.Read(feature, () => false);
+        }
+
         private readonly DeviceFeatureMethodDictionary _methodsToCheckIfAvailable;
         private readonly DeviceFeatureMethodDictionary _methodsToCheckIfEnabled;
+        private readonly DeviceFeatureMethodDictionary _methodsToInvoke;
     }
 }

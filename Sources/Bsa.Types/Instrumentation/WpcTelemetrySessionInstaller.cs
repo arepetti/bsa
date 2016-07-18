@@ -12,7 +12,7 @@
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU Lesser General Public License for more details.
 //
-// You should have received a copy of the GNU Lesse General Public License
+// You should have received a copy of the GNU Lesser General Public License
 // along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
@@ -36,6 +36,9 @@ namespace Bsa.Instrumentation
         /// must be unregistered (with <see cref="Uninstall"/>) when application is uninstalled or updated or when you want to add new counters (progressive
         /// <em>update</em> is only supported if you create a new category, it's not possible to add new counters to an existing category).
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="typeContainingTelemetryDataDefinitions"/> is <see langword="null"/>.
+        /// </exception>
         public static void Install(Type typeContainingTelemetryDataDefinitions)
         {
             if (typeContainingTelemetryDataDefinitions == null)
@@ -51,6 +54,9 @@ namespace Bsa.Instrumentation
         /// The type of a class derived from <see cref="WpcTelemetrySession"/> which contains the definition of all the counters you registered
         /// with a previous call to <see cref="Install"/>.
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="typeContainingTelemetryDataDefinitions"/> is <see langword="null"/>.
+        /// </exception>
         public static void Uninstall(Type typeContainingTelemetryDataDefinitions)
         {
             if (typeContainingTelemetryDataDefinitions == null)

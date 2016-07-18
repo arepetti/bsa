@@ -53,6 +53,8 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Acquisition\PhysicalChannelTests.cs" />
+    <Compile Include="Acquisition\AcquisitionDeviceTests.cs" />
     <Compile Include="DeviceTests.cs" />
     <Compile Include="HardwareErrorTests.cs" />
     <Compile Include="NonInstrumentedTestDevice.cs" />
