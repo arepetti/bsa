@@ -102,10 +102,7 @@ namespace Bsa.Hardware
                 return;
             
             if (!Status.IsAnyOf(DeviceConnectionStatus.Disconnected, DeviceConnectionStatus.Error))
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.State,
-                    HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot connect while in {0} state.", Status)));
-            }
+                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot connect while in {0} state.", Status));
 
             Status = DeviceConnectionStatus.Connecting;
             OnConnecting();
@@ -145,10 +142,7 @@ namespace Bsa.Hardware
                 return;
 
             if (Status != DeviceConnectionStatus.Connected)
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.State,
-                    HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot disconnect while in {0} state.", Status)));
-            }
+                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot disconnect while in {0} state.", Status));
 
             Status = DeviceConnectionStatus.Disconnecting;
             OnDisconnecting();
@@ -182,10 +176,7 @@ namespace Bsa.Hardware
         public void Reconnect()
         {
             if (Status != DeviceConnectionStatus.Connected)
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.State,
-                    HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot reconnect while in {0} state.", Status)));
-            }
+                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot reconnect while in {0} state.", Status));
 
             Disconnect();
             Connect();
@@ -286,6 +277,28 @@ namespace Bsa.Hardware
             {
                 base.Dispose(disposing);
             }
+        }
+
+        /// <summary>
+        /// Throws an exception of type <see cref="HardwareException"/> associated with an <see cref="HardwareError"/>
+        /// with severity <see cref="HardwareErrorSeverity.Error"/>, class <see cref="HardwareErrorClass.State"/> and specified error code and error message.
+        /// </summary>
+        /// <param name="errorCode">The error code for this error.</param>
+        /// <param name="message">The message that explains in detail this specific error.</param>
+        protected static void ThrowStateError(ushort errorCode, string message)
+        {
+            throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.State, errorCode, message));
+        }
+
+        /// <summary>
+        /// Throws an exception of type <see cref="HardwareException"/> associated with an <see cref="HardwareError"/>
+        /// with severity <see cref="HardwareErrorSeverity.Error"/>, class <see cref="HardwareErrorClass.Arguments"/> and specified error code and error message.
+        /// </summary>
+        /// <param name="errorCode">The error code for this error.</param>
+        /// <param name="message">The message that explains in detail this specific error.</param>
+        protected static void ThrowArgumentsError(ushort errorCode, string message)
+        {
+            throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.Arguments, errorCode, message));
         }
 
         private DeviceConnectionStatus _status;

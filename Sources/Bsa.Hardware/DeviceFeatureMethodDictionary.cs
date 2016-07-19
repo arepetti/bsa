@@ -25,13 +25,14 @@ namespace Bsa.Hardware
     // Maps a device feature to a method in Device class to check for its availablility.
     sealed class DeviceFeatureMethodDictionary
     {
-        public DeviceFeatureMethodDictionary(Device methodsContainer, string methodNameFormatString)
+        public DeviceFeatureMethodDictionary(Device methodsContainer, string methodNameFormatString, bool mayUseMethodWithOneParameter)
         {
             _device = methodsContainer;
             _methodNameFormatString = methodNameFormatString;
+            _mayUseMethodWithOneParameter = mayUseMethodWithOneParameter;
         }
 
-        public bool Read(DeviceFeature feature, Func<bool> defaultValue)
+        public bool Read(Feature feature, object param, Func<bool> defaultValue)
         {
             if (!feature.AssociatedDevice.IsAssignableFrom(_device.GetType()))
                 throw new ArgumentException("You can determine if a feature is available only if it belongs to its associated device or one of its derived classes.", "feature");
@@ -40,14 +41,25 @@ namespace Bsa.Hardware
             if (method == null)
                 return defaultValue();
 
-            return (bool)method.Invoke(_device, null);
+            if (method.GetParameters().Length == 0)
+                return (bool)method.Invoke(_device, null);
+
+            return (bool)method.Invoke(_device, new object[] { param });
+        }
+
+        public bool Read(Feature feature, Func<bool> defaultValue)
+        {
+            // If called method accepts one parameter then we pass null (unspecified), if
+            // it doesn't accept any parameter then param value is simply ignored.
+            return Read(feature, null, defaultValue);
         }
 
         private readonly Device _device;
         private readonly string _methodNameFormatString;
-        private readonly Dictionary<DeviceFeature, MethodInfo> _mapping = new Dictionary<DeviceFeature, MethodInfo>();
+        private readonly bool _mayUseMethodWithOneParameter;
+        private readonly Dictionary<Feature, MethodInfo> _mapping = new Dictionary<Feature, MethodInfo>();
 
-        private MethodInfo FindMethodForFeature(DeviceFeature feature)
+        private MethodInfo FindMethodForFeature(Feature feature)
         {
             lock (_mapping)
             {
@@ -55,18 +67,29 @@ namespace Bsa.Hardware
                 if (_mapping.TryGetValue(feature, out method))
                     return method;
 
-                // Any public/private static/instance method is eligible, search is performed case-insensitive, but
-                // it must be parameterless and have bool return type.
+                // See FeatureCollection documentation: any public/private static/instance method is eligible, search is case-insensitive
                 method = _device.GetType().GetMethod(String.Format(_methodNameFormatString, feature.EquivalentName),
                     BindingFlags.Static | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.IgnoreCase);
 
-                if (method != null && (method.GetParameters().Length != 0 || method.ReturnType != typeof(bool)))
+                if (method != null && !IsMethodEligibleForInvocation(method))
                     method = null;
 
                 _mapping.Add(feature, method);
 
                 return method;
             }
+        }
+
+        private bool IsMethodEligibleForInvocation(MethodInfo method)
+        {
+            // See FeatureCollection documentation: method must have bool return type, it can't be HideBySig and it MAY have one or zero parameters
+            if (method.ReturnType != typeof(bool))
+                return false;
+
+            if (method.IsGenericMethod)
+                return false;
+
+            return method.GetParameters().Length <= (_mayUseMethodWithOneParameter ? 1 : 0);
         }
     }
 }

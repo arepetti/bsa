@@ -28,13 +28,13 @@ namespace Bsa.Hardware
     /// Represents a feature available for a device.
     /// </summary>
     [DebuggerDisplay("{Name}")]
-    public sealed class DeviceFeature : IEquatable<DeviceFeature>
+    public sealed class Feature : IEquatable<Feature>
     {
         /// <overload>
-        /// Initializes a new instance of <see cref="DeviceFeature"/>.
+        /// Initializes a new instance of <see cref="Feature"/>.
         /// </overload>
         /// <summary>
-        /// Initializes a new instance of <see cref="DeviceFeature"/> associated with a specified device.
+        /// Initializes a new instance of <see cref="Feature"/> associated with a specified device.
         /// </summary>
         /// <param name="associatedDevice">
         /// The type of the device to which this feature is associated. Type must be a class derived from <see cref="Device"/>.
@@ -56,7 +56,7 @@ namespace Bsa.Hardware
         /// <br/>-or-<br/>
         /// If <paramref name="name"/> contains only non US-ASCII characters or it doesn't contain at least one alphanumeric character.
         /// </exception>
-        public DeviceFeature(Type associatedDevice, string name)
+        public Feature(Type associatedDevice, string name)
         {
             if (associatedDevice == null)
                 throw new ArgumentNullException("associatedDevice");
@@ -76,7 +76,7 @@ namespace Bsa.Hardware
         }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="DeviceFeature"/> associated with <see cref="Device"/>.
+        /// Initializes a new instance of <see cref="Feature"/> associated with <see cref="Device"/>.
         /// </summary>
         /// <param name="name">
         /// Unique case-insensitive name of this feature. It must contain at least one alphanumeric character and feature name
@@ -90,7 +90,7 @@ namespace Bsa.Hardware
         /// <br/>-or-<br/>
         /// If <paramref name="name"/> contains only non US-ASCII characters or it doesn't contain at least one alphanumeric character.
         /// </exception>
-        public DeviceFeature(string name)
+        public Feature(string name)
             : this(typeof(Device), name)
         {
         }
@@ -134,7 +134,7 @@ namespace Bsa.Hardware
             private set;
         }
 
-        public bool Equals(DeviceFeature other)
+        public bool Equals(Feature other)
         {
             if (Object.ReferenceEquals(other, null))
                 return false;
@@ -144,7 +144,7 @@ namespace Bsa.Hardware
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as DeviceFeature);
+            return Equals(obj as Feature);
         }
 
         public override int GetHashCode()
@@ -157,7 +157,7 @@ namespace Bsa.Hardware
             return Name;
         }
 
-        public static bool operator ==(DeviceFeature lhs, DeviceFeature rhs)
+        public static bool operator ==(Feature lhs, Feature rhs)
         {
             if (Object.ReferenceEquals(lhs, rhs))
                 return true;
@@ -168,7 +168,7 @@ namespace Bsa.Hardware
             return lhs.Equals(rhs);
         }
 
-        public static bool operator !=(DeviceFeature lhs, DeviceFeature rhs)
+        public static bool operator !=(Feature lhs, Feature rhs)
         {
             if (Object.ReferenceEquals(lhs, rhs))
                 return false;

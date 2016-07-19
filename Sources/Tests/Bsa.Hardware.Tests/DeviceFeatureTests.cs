@@ -28,11 +28,11 @@ namespace Bsa.Hardware.Tests
         [TestMethod]
         public void EqualityIsByName()
         {
-            Assert.IsTrue(new DeviceFeature("Test").Equals(new DeviceFeature("Test")));
-            Assert.IsTrue(new DeviceFeature("Test") == new DeviceFeature("Test"));
+            Assert.IsTrue(new Feature("Test").Equals(new Feature("Test")));
+            Assert.IsTrue(new Feature("Test") == new Feature("Test"));
 
-            var feature1 = new DeviceFeature("Test1");
-            var feature2 = new DeviceFeature("Test2");
+            var feature1 = new Feature("Test1");
+            var feature2 = new Feature("Test2");
 
             Assert.IsFalse(feature1.Equals(feature2));
             Assert.IsTrue(feature1 != feature2);
@@ -48,34 +48,34 @@ namespace Bsa.Hardware.Tests
         [TestMethod]
         public void EqualityIsCaseInsensitive()
         {
-            Assert.IsTrue(new DeviceFeature("Test") == new DeviceFeature("test"));
+            Assert.IsTrue(new Feature("Test") == new Feature("test"));
         }
 
         [TestMethod]
         public void LeadingAndTrailingSpacesAreIgnored()
         {
-            Assert.IsTrue(new DeviceFeature("Test  ") == new DeviceFeature("  Test"));
+            Assert.IsTrue(new Feature("Test  ") == new Feature("  Test"));
         }
 
         [TestMethod]
         public void HasValidEquivalentName()
         {
-            Assert.AreEqual("test", new DeviceFeature("test!").EquivalentName);
-            Assert.AreEqual("test123", new DeviceFeature("test123_測試").EquivalentName);
+            Assert.AreEqual("test", new Feature("test!").EquivalentName);
+            Assert.AreEqual("test123", new Feature("test123_測試").EquivalentName);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void EquivalentNameIsAlphanumericUsAscii()
         {
-            new DeviceFeature("測試");
+            new Feature("測試");
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void FeatureMustBeAssociatedWithProperObject()
         {
-            var feature = new DeviceFeature(typeof(DerivedTestDevice), "Test");
+            var feature = new Feature(typeof(DerivedTestDevice), "Test");
             using (var device = new TestDevice())
             {
                 // It fails because feature is associated with DerivedTestDevice and we're testing
@@ -107,10 +107,10 @@ namespace Bsa.Hardware.Tests
             }
         }
 
-        private static readonly DeviceFeature TestFeature0 = new DeviceFeature(typeof(TestDevice), "0");
-        private static readonly DeviceFeature TestFeature1 = new DeviceFeature(typeof(TestDevice), "1");
-        private static readonly DeviceFeature TestFeature2 = new DeviceFeature(typeof(DerivedTestDevice), "2");
-        private static readonly DeviceFeature TestFeature3 = new DeviceFeature(typeof(DerivedTestDevice), "3");
+        private static readonly Feature TestFeature0 = new Feature(typeof(TestDevice), "0");
+        private static readonly Feature TestFeature1 = new Feature(typeof(TestDevice), "1");
+        private static readonly Feature TestFeature2 = new Feature(typeof(DerivedTestDevice), "2");
+        private static readonly Feature TestFeature3 = new Feature(typeof(DerivedTestDevice), "3");
 
         private class TestDevice : NonInstrumentedTestDevice
         {

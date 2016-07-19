@@ -49,12 +49,14 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Acquisition\AcquisitionDevice.cs" />
+    <Compile Include="Acquisition\AcquisitionDeviceFeatures.cs" />
+    <Compile Include="Acquisition\AcquisitionMode.cs" />
     <Compile Include="Acquisition\PhysicalChannel.cs" />
     <Compile Include="Acquisition\PhysicalChannelCollection.cs" />
     <Compile Include="ComparisonExtensions.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DeviceConnectionStatus.cs" />
-    <Compile Include="DeviceFeature.cs" />
+    <Compile Include="Feature.cs" />
     <Compile Include="DeviceFeatureMethodDictionary.cs" />
     <Compile Include="DeviceTelemetry.cs" />
     <Compile Include="FeatureCollection.cs" />

@@ -28,38 +28,6 @@ namespace Bsa.Hardware.Acquisition
     public abstract class AcquisitionDevice : Device
     {
         /// <summary>
-        /// Feature that indicates if non-uniform sampling rate is supported.
-        /// </summary>
-        /// <remarks>
-        /// <c>IsFeatureSamplingOnValueChangeAvailable</c> indicates whether feature is available for a specific hardware and
-        /// <c>IsFeatureSamplingOnValueChangeEnabled</c> indicates if this feature is enabled for a particular configuration. If
-        /// this feature is always enabled then <c>IsFeatureSamplingOnValueChangeEnabled</c> may be omitted. To support this feature
-        /// may involve a lot of work for implementors because basic framework implementation does not offert any built-in support.
-        /// </remarks>
-        public static readonly DeviceFeature SamplingOnValueChange = new DeviceFeature(typeof(AcquisitionDevice), "SamplingOnValueChange");
-
-        /// <summary>
-        /// Feature that indicates is different channels may be acquired at different sampling rates.
-        /// </summary>
-        /// <remarks>
-        /// <c>IsFeatureMultifrequencyAvailable</c> indicates whether feature is available for a specific hardware and
-        /// <c>IsFeatureMultifrequencyEnabled</c> indicates if this feature is enabled for a particular configuration. If
-        /// this feature is always enabled then <c>IsFeatureMultifrequencyEnabled</c> may be omitted.
-        /// </remarks>
-        public static readonly DeviceFeature Multifrequency = new DeviceFeature(typeof(AcquisitionDevice), "Multifrequency");
-
-        /// <summary>
-        /// Feature that indicates if device driver can update device's on-board firmware.
-        /// </summary>
-        /// <remarks>
-        /// <c>IsFeatureFirmwareUpdateAvailable</c> indicates whether firmware update is available for a specific hardware and
-        /// <c>IsFeatureFirmwareUpdateEnabled</c> indicates if firmware actually needs to be updated. Both functions must be
-        /// specified, check is performed after connection has been estabilished. If connection has to be recreated after
-        /// an update it's implementor's responsability to call <see cref="Device.Reconnect"/>.
-        /// </remarks>
-        public static readonly DeviceFeature FirmwareUpdate = new DeviceFeature(typeof(AcquisitionDevice), "FirmwareUpdate");
-
-        /// <summary>
         /// Initializes a new instance of <see cref="AcquisitionDevice"/> with specified address.
         /// </summary>
         /// <param name="address">
@@ -74,7 +42,41 @@ namespace Bsa.Hardware.Acquisition
         /// <summary>
         /// Setup hardware device with current configuration.
         /// </summary>
-        public abstract void Setup();
+        /// <exception cref="HardwareException">
+        /// Device setup is not valid or device cannot be configured in this moment.
+        /// </exception>
+        public virtual void Setup()
+        {
+            if (Status != DeviceConnectionStatus.Connected)
+                ThrowStateError(HardwareErrorCodes.State.InvalidState, "Cannot setup device if it is not connected.");
+
+            if (IsConfigured)
+                ThrowStateError(HardwareErrorCodes.State.InvalidState, "Cannot setup device twice, if setup changed please first call Reconnect().");
+
+            SetupCore();
+
+            IsConfigured = true;
+            OnReady(EventArgs.Empty);
+        }
+
+        /// <summary>
+        /// Events generated after device has been configured and it is ready to acquire data.
+        /// </summary>
+        public event EventHandler Ready;
+
+        /// <summary>
+        /// Indicates whether device has been configured (calling <see cref="Setup"/>) and it is ready for acquisition.
+        /// </summary>
+        /// <value>
+        /// <see langword="true"/> if device has been configured (with a call to <see cref="Setup"/>) and it is now ready for acquisition. If setup
+        /// failed with an exception this property may be <see langword="true"/> but device might be unusable. Disconnection and reconnection reset this
+        /// property to default <see langword="false"/> value.
+        /// </value>
+        protected bool IsConfigured
+        {
+            get;
+            private set;
+        }
 
         /// <summary>
         /// Validates device configuration (such as options and address).
@@ -86,10 +88,25 @@ namespace Bsa.Hardware.Acquisition
         {
         }
 
+        /// <summary>
+        /// Setup hardware device with current configuration.
+        /// </summary>
+        protected abstract void SetupCore();
+
+        /// <summary>
+        /// Generates event <see cref="Ready"/>.
+        /// </summary>
+        /// <param name="e">Additional event arguments.</param>
+        protected virtual void OnReady(EventArgs e)
+        {
+            var ready = Ready;
+            if (ready != null)
+                ready(this, e);
+        }
+
         protected override void OnConnecting()
         {
             base.OnConnecting();
-
             ValidateConfiguration();
         }
 
@@ -97,8 +114,15 @@ namespace Bsa.Hardware.Acquisition
         {
             base.OnConnected();
 
-            if (Features.IsAvailableAndEnabled(FirmwareUpdate))
-                Features.Perform(FirmwareUpdate);
+            if (Features.IsAvailableAndEnabled(AcquisitionDeviceFeatures.FirmwareUpdate))
+                Features.Perform(AcquisitionDeviceFeatures.FirmwareUpdate);
+        }
+
+        protected override void OnDisconnecting()
+        {
+            base.OnDisconnecting();
+
+            IsConfigured = false;
         }
     }
 
@@ -107,8 +131,8 @@ namespace Bsa.Hardware.Acquisition
     /// </summary>
     /// <typeparam name="TChannelType">Effective type of channel descriptor.</typeparam>
     /// <remarks>
-    /// Channel configuration is validated when <see cref="Setup"/> method is invoked (after device has been connected). To be used
-    /// channel configuration must be sealed.
+    /// Channel configuration is validated when <see cref="AcquisitionDevice.Setup"/> method is invoked (after device has been connected).
+    /// To be used channel configuration must be sealed.
     /// </remarks>
     public abstract class AcquisitionDevice<TChannelType> : AcquisitionDevice
         where TChannelType : PhysicalChannel
@@ -131,7 +155,7 @@ namespace Bsa.Hardware.Acquisition
         /// </summary>
         /// <value>
         /// The list of physical channels that must be acquired, this collection must be sealed before
-        /// <see cref="Setup"/> method is invoked.
+        /// <see cref="AcquisitionDevice.Setup"/> method is invoked.
         /// </value>
         public PhysicalChannelCollection<TChannelType> Channels
         {
@@ -146,32 +170,17 @@ namespace Bsa.Hardware.Acquisition
         /// <br/>-or-<br/>
         /// If channel collection <see cref="Channels"/> has not been sealed (calling <c>Channels.Seal()</c>).
         /// </exception>
-        public override void Setup()
+        protected override void SetupCore()
         {
-            if (Status != DeviceConnectionStatus.Connected)
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.State, HardwareErrorCodes.State.InvalidState, "Cannot setup device if it is not connected."));
-            }
-
             if (!Channels.IsSealed)
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.Arguments, HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "Channel configuration must be sealed before you attempt to connect to device."));
-            }
+                ThrowArgumentsError(HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "Channel configuration must be sealed before you attempt to connect to device.");
 
             ValidateChannelsConfiguration();
-            SetupCore();
         }
 
         /// <summary>
-        /// Setup hardware device with current configuration.
-        /// </summary>
-        protected abstract void SetupCore();
-
-        /// <summary>
         /// Validates channels configuration (channels collection does not need to be sealed, this method may be invoked multiple times
-        /// before acquisitor is frozen and <see cref="Setup"/> called).
+        /// before acquisitor is frozen and <see cref="AcquisitionDevice.Setup"/> called).
         /// </summary>
         /// <exception cref="HardwareException">
         /// If channels configuration is not valid for this device.
@@ -179,34 +188,19 @@ namespace Bsa.Hardware.Acquisition
         protected virtual void ValidateChannelsConfiguration()
         {
             if (Channels.Count == 0)
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.Arguments, HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "At least one channel must be specified."));
-            }
+                ThrowArgumentsError(HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "At least one channel must be specified.");
 
-            if (Channels.Distinct(x => x.SamplingRate).Count() > 1 && !Features.IsAvailable(Multifrequency))
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.Arguments, HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "Hardware does not support multifrequency acquisition, all channels must have same sampling rate."));
-            }
+            if (Channels.Distinct(x => x.SamplingRate).Count() > 1 && !Features.IsAvailable(AcquisitionDeviceFeatures.Multifrequency))
+                ThrowArgumentsError(HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "Hardware does not support multifrequency acquisition, all channels must have same sampling rate.");
 
-            if (Channels.Any(x => x.SamplingRate == 0) && !Features.IsAvailable(SamplingOnValueChange))
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.Arguments, HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "Hardware does not support non uniform sampling, all channels must have a sampling rate higher than zero."));
-            }
+            if (Channels.Any(x => x.SamplingRate == 0) && !Features.IsAvailable(AcquisitionDeviceFeatures.SamplingOnValueChange))
+                ThrowArgumentsError(HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "Hardware does not support non uniform sampling, all channels must have a sampling rate higher than zero.");
 
             if (!IsUniqueForChannels(x => x.Id))
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.Arguments, HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "All channels must have a different ID."));
-            }
+                ThrowArgumentsError(HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "All channels must have a different ID.");
 
             if (!IsUniqueForChannels(x => x.Name))
-            {
-                throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error,
-                    HardwareErrorClass.Arguments, HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "All channels must have a different name."));
-            }
+                ThrowArgumentsError(HardwareErrorCodes.Arguments.InvalidChannelConfiguration, "All channels must have a different name.");
         }
 
         private readonly PhysicalChannelCollection<TChannelType> _channels;

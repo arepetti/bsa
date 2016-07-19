@@ -28,8 +28,13 @@ namespace Bsa.Hardware
     /// are available and enabled using methods with conventional names. Methods can be instance (virtual or not)
     /// or static methods but they must respect following rules:
     /// <list type="bullet">
-    /// <item>Method cannot have parameters.</item>
+    /// <item>Method cannot have parameters (but see later for an exception).</item>
     /// <item>Method must return <see cref="Boolean"/>.</item>
+    /// <item>Method must not be a generic method.</item>
+    /// <item>
+    /// These functions must not be overloaded, if there is more than one function with the same name then behavior is unspecified
+    /// (the right function may be called or just ignored and never called.)
+    /// </item>
     /// <item>
     /// Method name must have prefix <c>IsFeature</c> followed by feature's equivalent name and then a suffix to indicate
     /// if method is used to determine whether a feature is available (<c>IsFeature*Available</c>) or enabled (<c>IsFeature*Enabled</c>).
@@ -37,7 +42,12 @@ namespace Bsa.Hardware
     /// method signature is the same (with a <c>bool</c> return value which may be ignored) and name is <c>Perform*</c>.
     /// </item>
     /// <item>
-    /// Derived classes may override base class method if it is virtual but overriding hiding base method signature is not supported.
+    /// <c>Perform*</c> may accept an optional parameter of type <c>Object</c>. It's optional (you can both declare the method with
+    /// this parameter even if it will never be used or do not declare it when used). If you declare the method with the optional
+    /// parameter and it's not specified then it will be <see langword="null"/>.
+    /// </item>
+    /// <item>
+    /// Derived classes may override base class method if it is virtual but hiding base method signature is not supported.
     /// </item>
     /// </list>
     /// </remarks>
@@ -49,9 +59,9 @@ namespace Bsa.Hardware
         /// <param name="device">The device to which this feature-set is associated.</param>
         internal FeatureCollection(Device device)
         {
-            _methodsToCheckIfAvailable = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Available");
-            _methodsToCheckIfEnabled = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Enabled");
-            _methodsToInvoke = new DeviceFeatureMethodDictionary(device, "Perform{0}");
+            _methodsToCheckIfAvailable = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Available", mayUseMethodWithOneParameter: false);
+            _methodsToCheckIfEnabled = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Enabled", mayUseMethodWithOneParameter: false);
+            _methodsToInvoke = new DeviceFeatureMethodDictionary(device, "Perform{0}", mayUseMethodWithOneParameter: true);
         }
 
         /// <summary>
@@ -68,7 +78,7 @@ namespace Bsa.Hardware
         /// <exception cref="ArgumentException">
         /// If specified feature is not associated with device linked with this object (or to one of its derived classes).
         /// </exception>
-        public bool IsAvailable(DeviceFeature feature)
+        public bool IsAvailable(Feature feature)
         {
             if (feature == null)
                 throw new ArgumentNullException("feature");
@@ -98,7 +108,7 @@ namespace Bsa.Hardware
         /// application behavior is undefined (or, better, use <see cref="IsAvailableAndEnabled"/> instead of this function which is designed to be
         /// used when availability is checked once and if enabled is checked multiple times.)
         /// </remarks>
-        public bool IsEnabled(DeviceFeature feature)
+        public bool IsEnabled(Feature feature)
         {
             if (feature == null)
                 throw new ArgumentNullException("feature");
@@ -114,7 +124,7 @@ namespace Bsa.Hardware
         /// <returns>
         /// <see langword="true"/> if specified feature is both available and enabled.
         /// </returns>
-        public bool IsAvailableAndEnabled(DeviceFeature feature)
+        public bool IsAvailableAndEnabled(Feature feature)
         {
             if (feature == null)
                 throw new ArgumentNullException("feature");
@@ -129,6 +139,7 @@ namespace Bsa.Hardware
         /// Performs an operation related to a specific feature.
         /// </summary>
         /// <param name="feature">The feature you want to <em>perform</em>.</param>
+        /// <param name="param">An optional parameter for the method to invoke.</param>
         /// <returns>
         /// Return value is implementation defined, if required method is not present then this function
         /// always return <see langword="false"/>.
@@ -142,12 +153,12 @@ namespace Bsa.Hardware
         /// <remarks>
         /// This method do not check if feature is available and enabled before attempting to perform specified operation.
         /// </remarks>
-        public bool Perform(DeviceFeature feature)
+        public bool Perform(Feature feature, object param = null)
         {
             if (feature == null)
                 throw new ArgumentNullException("feature");
 
-            return _methodsToInvoke.Read(feature, () => false);
+            return _methodsToInvoke.Read(feature, param, () => false);
         }
 
         private readonly DeviceFeatureMethodDictionary _methodsToCheckIfAvailable;

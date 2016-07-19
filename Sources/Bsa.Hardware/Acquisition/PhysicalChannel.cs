@@ -84,9 +84,9 @@ namespace Bsa.Hardware.Acquisition
         /// </summary>
         /// <value>
         /// The sampling rate for this channel. 0 means <em>sampled on change</em> if it's supported
-        /// (see <see cref="AcquisitionDevice.SamplingOnValueChange"/> feature) otherwise it a placeholder for an invalid value.
+        /// (see <see cref="AcquisitionDeviceFeatures.SamplingOnValueChange"/> feature) otherwise it a placeholder for an invalid value.
         /// Usage of this property is implementation defined. If hardware supports acquisition of channels with multiple frequencies
-        /// (see <see cref="AcquisitionDevice.Multifrequency"/> feature) then this value may be different for channels of the same set
+        /// (see <see cref="AcquisitionDeviceFeatures.Multifrequency"/> feature) then this value may be different for channels of the same set
         /// otherwise it must be the same for all channels. Default value is 0.
         /// </value>
         /// <exception cref="ArgumentOutOfRangeException">

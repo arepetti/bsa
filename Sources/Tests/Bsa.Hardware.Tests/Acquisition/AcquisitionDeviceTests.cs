@@ -128,10 +128,6 @@ namespace Bsa.Hardware.Tests.Acquisition
             {
             }
 
-            protected override void SetupCore()
-            {
-            }
-
             protected override void ConnectCore()
             {
             }
@@ -148,7 +144,7 @@ namespace Bsa.Hardware.Tests.Acquisition
             }
         }
 
-        class TestAcquisitionDeviceWithFirmwareUpdate : TestAcquisitionDevice
+        sealed class TestAcquisitionDeviceWithFirmwareUpdate : TestAcquisitionDevice
         {
             public TestAcquisitionDeviceWithFirmwareUpdate(bool canUpdate)
             {
