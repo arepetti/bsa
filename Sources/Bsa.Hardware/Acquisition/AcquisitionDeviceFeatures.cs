@@ -16,6 +16,7 @@ namespace Bsa.Hardware.Acquisition
         /// this feature is always enabled then <c>IsFeatureSamplingOnValueChangeEnabled</c> may be omitted. To support this feature
         /// may involve a lot of work for implementors because basic framework implementation does not offert any built-in support.
         /// </remarks>
+        public static readonly Feature SamplingOnValueChange = new Feature(typeof(AcquisitionDevice), "SamplingOnValueChange");
 
         /// <summary>
         /// Feature that indicates is different channels may be acquired at different sampling rates.
@@ -25,6 +26,7 @@ namespace Bsa.Hardware.Acquisition
         /// <c>IsFeatureMultifrequencyEnabled</c> indicates if this feature is enabled for a particular configuration. If
         /// this feature is always enabled then <c>IsFeatureMultifrequencyEnabled</c> may be omitted.
         /// </remarks>
+        public static readonly Feature Multifrequency = new Feature(typeof(AcquisitionDevice), "Multifrequency");
 
         /// <summary>
         /// Feature that indicates if device driver can update device's on-board firmware.
@@ -35,6 +37,7 @@ namespace Bsa.Hardware.Acquisition
         /// specified, check is performed after connection has been estabilished. If connection has to be recreated after
         /// an update it's implementor's responsability to call <see cref="Device.Reconnect"/>.
         /// </remarks>
+        public static readonly Feature FirmwareUpdate = new Feature(typeof(AcquisitionDevice), "FirmwareUpdate");
 
         /// <summary>
         /// Feature that indicates if device supports impedance measurement of its inputs.
@@ -49,6 +52,7 @@ namespace Bsa.Hardware.Acquisition
         /// before switching mode between data/ohmeter/calibration) then it's device driver responsability to hide this detail: from
         /// caller point of view mode must be changed regardless current state.
         /// </remarks>
+        public static readonly Feature Ohmeter = new Feature(typeof(AcquisitionDevice), "Ohmeter");
 
         /// <summary>
         /// Feature that indicates if device supports calibration of its inputs.
@@ -63,6 +67,7 @@ namespace Bsa.Hardware.Acquisition
         /// before switching mode between data/ohmeter/calibration) then it's device driver responsability to hide this detail: from
         /// caller point of view mode must be changed regardless current state.
         /// </remarks>
+        public static readonly Feature Calibration = new Feature(typeof(AcquisitionDevice), "Calibration");
 
         /// <summary>
         /// Feature that indicates if device can pull-down its inputs to 0.
@@ -77,6 +82,7 @@ namespace Bsa.Hardware.Acquisition
         /// when this mode is disabled doesn't perform anything (and returns current state). If parameter is <see langword="null"/> then
         /// default behavior is performed (device dependant). If device doesn't fully support this feature then drivers must emulate required behavior.
         /// </remarks>
+        public static readonly Feature PullInputsDown = new Feature(typeof(AcquisitionDevice), "PullInputsDown");
 
     }
 }
