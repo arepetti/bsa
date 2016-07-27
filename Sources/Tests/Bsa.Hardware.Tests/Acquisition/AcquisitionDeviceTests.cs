@@ -89,7 +89,7 @@ namespace Bsa.Hardware.Tests.Acquisition
 
         [TestMethod]
         [ExpectedException(typeof(HardwareException))]
-        public void CannotSetupWithDuplicatedChannels1()
+        public void CannotSetupWithDuplicatedChannelIds()
         {
             using (var device = new TestAcquisitionDevice())
             {
@@ -104,7 +104,7 @@ namespace Bsa.Hardware.Tests.Acquisition
 
         [TestMethod]
         [ExpectedException(typeof(HardwareException))]
-        public void CannotSetupWithDuplicatedChannels2()
+        public void CannotSetupWithDuplicatedChannelNames()
         {
             using (var device = new TestAcquisitionDevice())
             {
@@ -134,14 +134,14 @@ namespace Bsa.Hardware.Tests.Acquisition
         [TestMethod]
         public void CanUpdateFirmwareIfRequired()
         {
-            using (var device = new TestAcquisitionDeviceWithFirmwareUpdate(false))
+            using (var device = new TestAcquisitionDeviceWithFirmwareUpdate(canUpdate: false))
             {
                 device.Connect();
 
                 Assert.IsFalse(device.HasBeenUpdated, "No firmware update was required but it has been performed.");
             }
 
-            using (var device = new TestAcquisitionDeviceWithFirmwareUpdate(true))
+            using (var device = new TestAcquisitionDeviceWithFirmwareUpdate(canUpdate: true))
             {
                 device.Connect();
 
