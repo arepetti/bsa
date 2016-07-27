@@ -52,5 +52,24 @@ namespace Bsa.Hardware.Tests
 
             Assert.AreEqual(error1.Message, exception.Message);
         }
+
+        [TestMethod]
+        public void CanConvertToString()
+        {
+            var error = new HardwareError(HardwareErrorSeverity.Critical, HardwareErrorClass.Device, 1, "1");
+            string asString = error.ToString();
+
+            Assert.IsTrue(!String.IsNullOrWhiteSpace(asString) && asString != typeof(HardwareError).FullName); 
+        }
+
+        [TestMethod]
+        public void HasBasicRetrySupport()
+        {
+            var notRetriable = new HardwareError(HardwareErrorSeverity.Critical, HardwareErrorClass.Device, 1, "1");
+            var retriable = new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.Communication, 1, "1");
+
+            Assert.AreEqual(false, notRetriable.IsRetryable());
+            Assert.AreEqual(true, retriable.IsRetryable());
+        }
     }
 }
