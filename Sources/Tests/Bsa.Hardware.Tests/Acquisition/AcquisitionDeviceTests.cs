@@ -33,9 +33,19 @@ namespace Bsa.Hardware.Tests.Acquisition
             {
                 device.Connect();
 
-                device.Channels.Add(new PhysicalChannel(Guid.NewGuid()) { Name = "1", SamplingRate = 100 });
-                device.Channels.Add(new PhysicalChannel(Guid.NewGuid()) { Name = "2", SamplingRate = 100 });
+                var id1 = Guid.NewGuid();
+                var id2 = Guid.NewGuid();
+
+                device.Channels.Add(new PhysicalChannel(id1) { Name = "1", SamplingRate = 100 });
+                device.Channels.Add(new PhysicalChannel(id2) { Name = "2", SamplingRate = 100 });
                 device.Channels.Seal();
+
+                // These are basic tests on PhysicalChannelCollection. If they grow in number
+                // then it may be worth to move to a separate class.
+                Assert.IsTrue(device.Channels.Contains(id1));
+                Assert.IsTrue(device.Channels.Contains(id2));
+                Assert.IsFalse(device.Channels.Contains(Guid.NewGuid()));
+                Assert.IsTrue(device.Channels[id1].Id == id1);
 
                 device.Setup();
             }

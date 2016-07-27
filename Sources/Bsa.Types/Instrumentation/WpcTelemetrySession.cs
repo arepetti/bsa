@@ -94,7 +94,13 @@ namespace Bsa.Instrumentation
             if (holder.IsDisabled)
                 return;
 
-            holder.Counter.IncrementBy(amount);
+            // Micro-optimization but Increment() is slightly faster than IncrementBy(), it's little but it's better to don't waste too much
+            // time just for instrumentation (we don't know in which context this method will be called).
+            if (amount == 1)
+                holder.Counter.Increment();
+            else
+                holder.Counter.IncrementBy(amount);
+
             if (data.CounterType == TelemetryDataType.AverageCount)
                 holder.Base.Increment();
         }
