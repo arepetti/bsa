@@ -62,17 +62,17 @@ namespace Bsa.Hardware
         /// </summary>
         /// <value>
         /// Connection status to the device. Almost all operations can be performed only when driver
-        /// has been connected to the device with <see cref="Connect"/>. Initial value is <see cref="DeviceConnectionStatus.Disconnected"/>.
+        /// has been connected to the device with <see cref="Connect"/>. Initial value is <see cref="ConnectionState.Disconnected"/>.
         /// </value>
-        public DeviceConnectionStatus Status
+        public ConnectionState State
         {
-            get { return _status; }
+            get { return _state; }
             private set
             {
-                if (_status != value)
+                if (_state != value)
                 {
-                    _status = value;
-                    OnStatusChanged(EventArgs.Empty);
+                    _state = value;
+                    OnStateChanged(EventArgs.Empty);
                 }
             }
         }
@@ -98,13 +98,13 @@ namespace Bsa.Hardware
         {
             ThrowIfDisposed();
 
-            if (Status.IsAnyOf(DeviceConnectionStatus.Connecting, DeviceConnectionStatus.Connected))
+            if (State.IsAnyOf(ConnectionState.Connecting, ConnectionState.Connected))
                 return;
             
-            if (!Status.IsAnyOf(DeviceConnectionStatus.Disconnected, DeviceConnectionStatus.Error))
-                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot connect while in {0} state.", Status));
+            if (!State.IsAnyOf(ConnectionState.Disconnected, ConnectionState.Error))
+                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot connect while in {0} state.", State));
 
-            Status = DeviceConnectionStatus.Connecting;
+            State = ConnectionState.Connecting;
             OnConnecting();
 
             ReliabilityHelpers.ExecuteAndRetryOnError(
@@ -119,12 +119,12 @@ namespace Bsa.Hardware
                 exception => // This was the last attempt to perform this operation, exception will be re-thrown
                 {
                     HandleErrors(((HardwareException)exception).Errors);
-                    Status = DeviceConnectionStatus.Error;
+                    State = ConnectionState.Error;
                 }
             );
 
             Telemetry.Increment(DeviceTelemetry.NumberOfSuccessfulConnections, 1);
-            Status = DeviceConnectionStatus.Connected;
+            State = ConnectionState.Connected;
             OnConnected();
         }
 
@@ -138,13 +138,13 @@ namespace Bsa.Hardware
         {
             ThrowIfDisposed();
 
-            if (Status.IsAnyOf(DeviceConnectionStatus.Disconnecting, DeviceConnectionStatus.Disconnected))
+            if (State.IsAnyOf(ConnectionState.Disconnecting, ConnectionState.Disconnected))
                 return;
 
-            if (Status != DeviceConnectionStatus.Connected)
-                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot disconnect while in {0} state.", Status));
+            if (State != ConnectionState.Connected)
+                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot disconnect while in {0} state.", State));
 
-            Status = DeviceConnectionStatus.Disconnecting;
+            State = ConnectionState.Disconnecting;
             OnDisconnecting();
 
             try
@@ -161,7 +161,7 @@ namespace Bsa.Hardware
 
             // In case of error we do not go in "error state" but we consider device as disconnected (if exception
             // is handled elsewhere).
-            Status = DeviceConnectionStatus.Disconnected;
+            State = ConnectionState.Disconnected;
             OnDisconnected();
         }
 
@@ -175,17 +175,17 @@ namespace Bsa.Hardware
         /// </exception>
         public void Reconnect()
         {
-            if (Status != DeviceConnectionStatus.Connected)
-                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot reconnect while in {0} state.", Status));
+            if (State != ConnectionState.Connected)
+                ThrowStateError(HardwareErrorCodes.State.CannotChangeState, String.Format("Cannot reconnect while in {0} state.", State));
 
             Disconnect();
             Connect();
         }
 
         /// <summary>
-        /// Event generated when <see cref="Status"/> property changes.
+        /// Event generated when <see cref="State"/> property changes.
         /// </summary>
-        public event EventHandler StatusChanged;
+        public event EventHandler StateChanged;
 
         /// <summary>
         /// In derived classes perform the connection to the device.
@@ -241,14 +241,14 @@ namespace Bsa.Hardware
         }
 
         /// <summary>
-        /// Raises <see cref="StatusChanged"/> event.
+        /// Raises <see cref="StateChanged"/> event.
         /// </summary>
         /// <param name="e">Additional event arguments.</param>
-        protected virtual void OnStatusChanged(EventArgs e)
+        protected virtual void OnStateChanged(EventArgs e)
         {
-            var statusChanged = StatusChanged;
-            if (statusChanged != null)
-                statusChanged(this, e);
+            var stateChanged = StateChanged;
+            if (stateChanged != null)
+                stateChanged(this, e);
         }
 
         /// <summary>
@@ -270,7 +270,7 @@ namespace Bsa.Hardware
                 // If device is connected we disconnect it now, note that DeviceConnectionStatus.Connecting
                 // is not aborted and device will be connected after this instance has been disposed. It's a logical
                 // error and it should be avoided because it leaves the object in an indeterminate state.
-                if (!IsDisposed && Status == DeviceConnectionStatus.Connected)
+                if (!IsDisposed && State == ConnectionState.Connected)
                     Disconnect();
             }
             finally
@@ -301,7 +301,7 @@ namespace Bsa.Hardware
             throw new HardwareException(new HardwareError(HardwareErrorSeverity.Error, HardwareErrorClass.Arguments, errorCode, message));
         }
 
-        private DeviceConnectionStatus _status;
+        private ConnectionState _state;
         private readonly FeatureCollection _features;
     }
 }

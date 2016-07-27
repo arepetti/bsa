@@ -17,6 +17,7 @@
 //
 
 using System;
+using System.Linq;
 using System.Collections.ObjectModel;
 
 namespace Bsa.Hardware.Acquisition
@@ -27,5 +28,33 @@ namespace Bsa.Hardware.Acquisition
     public sealed class PhysicalChannelCollection<T> : SealableCollection<T>
         where T : PhysicalChannel
     {
+        /// <summary>
+        /// Determines if this collection contains a channel with specified ID.
+        /// </summary>
+        /// <param name="channelId">ID of the channel to search for.</param>
+        /// <returns>
+        /// <see langword="true"/> if this collection contains a channel with ID <see cref="PhysicalChannel.Id"/>
+        /// equals to specified id <paramref name="channelId"/>).
+        /// </returns>
+        public bool Contains(Guid channelId)
+        {
+            return Items.FirstOrDefault(x => x.Id == channelId) != null;
+        }
+
+        /// <summary>
+        /// Returns the channel with the specified ID.
+        /// </summary>
+        /// <param name="channelId">ID of the channel to search for.</param>
+        /// <returns>
+        /// The channel (of type <typeparamref name="T"/>) with ID <see cref="PhysicalChannel.Id"/>
+        /// equals to specified id <paramref name="channelId"/>.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        /// If this collection does not contain any channel with ID <paramref name="channelId"/>.
+        /// </exception>
+        public T this[Guid channelId]
+        {
+            get { return Items.First(x => x.Id == channelId); }
+        }
     }
 }

@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,13 +52,17 @@
     <Compile Include="Acquisition\AcquisitionDevice.cs" />
     <Compile Include="Acquisition\AcquisitionDeviceFeatures.cs" />
     <Compile Include="Acquisition\AcquisitionMode.cs" />
+    <Compile Include="Acquisition\DataEventArgs.cs" />
+    <Compile Include="Acquisition\DataPacket.cs" />
+    <Compile Include="Acquisition\OhmeterEventArgs.cs" />
     <Compile Include="Acquisition\PhysicalChannel.cs" />
     <Compile Include="Acquisition\PhysicalChannelCollection.cs" />
+    <Compile Include="Acquisition\PhysicalChannelImpedance.cs" />
     <Compile Include="ComparisonExtensions.cs" />
     <Compile Include="Device.cs" />
-    <Compile Include="DeviceConnectionStatus.cs" />
+    <Compile Include="ConnectionState.cs" />
     <Compile Include="Feature.cs" />
-    <Compile Include="DeviceFeatureMethodDictionary.cs" />
+    <Compile Include="FeatureMethodDictionary.cs" />
     <Compile Include="DeviceTelemetry.cs" />
     <Compile Include="FeatureCollection.cs" />
     <Compile Include="HardwareError.cs" />
@@ -65,6 +70,7 @@
     <Compile Include="HardwareErrorCodes.cs" />
     <Compile Include="HardwareErrorSeverity.cs" />
     <Compile Include="HardwareException.cs" />
+    <Compile Include="NotSupportedFeatureException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReliabilityHelpers.cs" />
   </ItemGroup>

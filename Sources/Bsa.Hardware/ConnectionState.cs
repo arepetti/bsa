@@ -21,9 +21,9 @@ using System;
 namespace Bsa.Hardware
 {
     /// <summary>
-    /// Specifies the connection status of a <see cref="Device"/>.
+    /// Specifies the connection state of a <see cref="Device"/>.
     /// </summary>
-    public enum DeviceConnectionStatus
+    public enum ConnectionState
     {
         /// <summary>
         /// Device is currently disconnected (or it has never been connected).

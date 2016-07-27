@@ -11,6 +11,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsa.Hardware", "Bsa.Hardwar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsa.Hardware.Tests", "Tests\Bsa.Hardware.Tests\Bsa.Hardware.Tests.csproj", "{F78433B9-BB40-4345-AACF-8E8EE5C515B6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{63307F77-A8C6-43E1-A249-2B4EA0AB3CA0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hardware", "Hardware", "{41D55FC6-AF30-44EE-8363-D48B0A994B7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoiseGenerator", "Examples\Hardware\NoiseGenerator\NoiseGenerator\NoiseGenerator.csproj", "{4F99A9FF-E4CE-4555-94F5-286DACFC4389}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +39,10 @@ Global
 		{F78433B9-BB40-4345-AACF-8E8EE5C515B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F78433B9-BB40-4345-AACF-8E8EE5C515B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F78433B9-BB40-4345-AACF-8E8EE5C515B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F99A9FF-E4CE-4555-94F5-286DACFC4389}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F99A9FF-E4CE-4555-94F5-286DACFC4389}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F99A9FF-E4CE-4555-94F5-286DACFC4389}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F99A9FF-E4CE-4555-94F5-286DACFC4389}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -40,5 +50,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{95FCAAA5-876F-48D8-969B-4848F1296C98} = {5EAD9ED7-6666-4938-AA74-E0C6627E2AFD}
 		{F78433B9-BB40-4345-AACF-8E8EE5C515B6} = {5EAD9ED7-6666-4938-AA74-E0C6627E2AFD}
+		{41D55FC6-AF30-44EE-8363-D48B0A994B7E} = {63307F77-A8C6-43E1-A249-2B4EA0AB3CA0}
+		{4F99A9FF-E4CE-4555-94F5-286DACFC4389} = {41D55FC6-AF30-44EE-8363-D48B0A994B7E}
 	EndGlobalSection
 EndGlobal

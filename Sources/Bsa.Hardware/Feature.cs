@@ -66,7 +66,7 @@ namespace Bsa.Hardware
 
             if (String.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("Name cannot be a null or empty string.");
-
+            
             AssociatedDevice = associatedDevice;
             Name = name.Trim();
             EquivalentName = StripNonAlphanumericCharacters(name);

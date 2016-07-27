@@ -32,7 +32,7 @@ namespace Bsa.Hardware.Tests
             {
                 device.Connect();
 
-                Assert.AreEqual(DeviceConnectionStatus.Connected, device.Status);
+                Assert.AreEqual(ConnectionState.Connected, device.State);
                 Assert.AreEqual(1, device.ConnectionAttempts);
             }
         }
@@ -44,7 +44,7 @@ namespace Bsa.Hardware.Tests
             {
                 int numberOfChanges = 0;
 
-                device.StatusChanged += (s, e) => ++numberOfChanges;
+                device.StateChanged += (s, e) => ++numberOfChanges;
                 device.Connect();
 
                 Assert.IsTrue(numberOfChanges > 0);
@@ -59,7 +59,7 @@ namespace Bsa.Hardware.Tests
                 device.Connect();
                 device.Connect();
 
-                Assert.AreEqual(DeviceConnectionStatus.Connected, device.Status);
+                Assert.AreEqual(ConnectionState.Connected, device.State);
                 Assert.AreEqual(1, device.ConnectionAttempts);
             }
         }
@@ -70,14 +70,14 @@ namespace Bsa.Hardware.Tests
             using (var device = new TestDevice(0))
             {
                 device.Connect();
-                Assert.AreEqual(DeviceConnectionStatus.Connected, device.Status);
+                Assert.AreEqual(ConnectionState.Connected, device.State);
                 Assert.AreEqual(1, device.ConnectionAttempts);
 
                 device.Disconnect();
-                Assert.AreEqual(DeviceConnectionStatus.Disconnected, device.Status);
+                Assert.AreEqual(ConnectionState.Disconnected, device.State);
 
                 device.Connect();
-                Assert.AreEqual(DeviceConnectionStatus.Connected, device.Status);
+                Assert.AreEqual(ConnectionState.Connected, device.State);
                 Assert.AreEqual(2, device.ConnectionAttempts);
             }
         }
@@ -91,7 +91,7 @@ namespace Bsa.Hardware.Tests
 
                 device.Connect();
 
-                Assert.AreEqual(DeviceConnectionStatus.Connected, device.Status);
+                Assert.AreEqual(ConnectionState.Connected, device.State);
                 Assert.AreEqual(3, device.ConnectionAttempts); // 2 failed + 1 successful
 
                 // At least one second elapsed because of delay between each attempt
@@ -122,7 +122,7 @@ namespace Bsa.Hardware.Tests
                 {
                 }
 
-                Assert.AreEqual(DeviceConnectionStatus.Error, device.Status);
+                Assert.AreEqual(ConnectionState.Error, device.State);
             }
         }
 
@@ -139,11 +139,11 @@ namespace Bsa.Hardware.Tests
                 {
                 }
 
-                Assert.AreEqual(DeviceConnectionStatus.Error, device.Status);
+                Assert.AreEqual(ConnectionState.Error, device.State);
 
                 device.NumberOfConnectionsToFail = 0;
                 device.Connect();
-                Assert.AreEqual(DeviceConnectionStatus.Connected, device.Status);
+                Assert.AreEqual(ConnectionState.Connected, device.State);
             }
         }
 

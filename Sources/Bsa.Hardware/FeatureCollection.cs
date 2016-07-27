@@ -59,9 +59,9 @@ namespace Bsa.Hardware
         /// <param name="device">The device to which this feature-set is associated.</param>
         internal FeatureCollection(Device device)
         {
-            _methodsToCheckIfAvailable = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Available", mayUseMethodWithOneParameter: false);
-            _methodsToCheckIfEnabled = new DeviceFeatureMethodDictionary(device, "IsFeature{0}Enabled", mayUseMethodWithOneParameter: false);
-            _methodsToInvoke = new DeviceFeatureMethodDictionary(device, "Perform{0}", mayUseMethodWithOneParameter: true);
+            _methodsToCheckIfAvailable = new FeatureMethodDictionary(device, "IsFeature{0}Available", mayUseMethodWithOneParameter: false);
+            _methodsToCheckIfEnabled = new FeatureMethodDictionary(device, "IsFeature{0}Enabled", mayUseMethodWithOneParameter: false);
+            _methodsToInvoke = new FeatureMethodDictionary(device, "Perform{0}", mayUseMethodWithOneParameter: true);
         }
 
         /// <summary>
@@ -161,8 +161,8 @@ namespace Bsa.Hardware
             return _methodsToInvoke.Read(feature, param, () => false);
         }
 
-        private readonly DeviceFeatureMethodDictionary _methodsToCheckIfAvailable;
-        private readonly DeviceFeatureMethodDictionary _methodsToCheckIfEnabled;
-        private readonly DeviceFeatureMethodDictionary _methodsToInvoke;
+        private readonly FeatureMethodDictionary _methodsToCheckIfAvailable;
+        private readonly FeatureMethodDictionary _methodsToCheckIfEnabled;
+        private readonly FeatureMethodDictionary _methodsToInvoke;
     }
 }

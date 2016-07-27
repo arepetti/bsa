@@ -35,6 +35,7 @@ namespace Bsa.Hardware.Acquisition
         public PhysicalChannel(Guid id)
         {
             _id = id;
+            _range = new Range<double>(-1, 1);
         }
 
         /// <summary>
@@ -107,6 +108,44 @@ namespace Bsa.Hardware.Acquisition
             }
         }
 
+        /// <summary>
+        /// Gets/sets the physical range of this input.
+        /// </summary>
+        /// <value>
+        /// The physical range of this input. Not all hardware devices support this feature, drivers
+        /// may throw an exception if range selection is not available (or given value is out of range).
+        /// Unit of measure is implementation defined. Default value is [-1 +1].
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <c>Minimum</c> is higher or equal than <c>Maximum</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If minimum or maximum value is <see cref="Double.NegativeInfinity"/>, <see cref="Double.PositiveInfinity"/>
+        /// or <see cref="Double.NaN"/>.
+        /// </exception>
+        public Range<double> Range
+        {
+            get { return _range; }
+            set
+            {
+                ThrowIfSealed();
+
+                if (value.Minimum > value.Maximum)
+                    throw new ArgumentOutOfRangeException("Minimum cannot be higher than maximum.");
+
+                if (value.Minimum == value.Maximum)
+                    throw new ArgumentOutOfRangeException("Minimum and maximum value must be different.");
+
+                if (Double.IsInfinity(value.Minimum) || Double.IsNaN(value.Minimum))
+                    throw new ArgumentException("Minimum value cannot be Infinity or NaN.");
+
+                if (Double.IsInfinity(value.Maximum) || Double.IsNaN(value.Maximum))
+                    throw new ArgumentException("Maximum value cannot be Infinity or NaN.");
+
+                _range = value;
+            }
+        }
+
         protected override Sealable CreateNewInstance()
         {
             return new PhysicalChannel(Id);
@@ -115,12 +154,14 @@ namespace Bsa.Hardware.Acquisition
         protected override void CopyPropertiesTo(Sealable target)
         {
             PhysicalChannel other = (PhysicalChannel)target;
-            other.Name = this.Name;
-            other.SamplingRate = this.SamplingRate;
+            other._name = this._name;
+            other._samplingRate = this._samplingRate;
+            other._range = this._range;
         }
 
         private readonly Guid _id;
         private string _name;
         private double _samplingRate;
+        private Range<double> _range;
     }
 }

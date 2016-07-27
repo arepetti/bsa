@@ -73,5 +73,21 @@ namespace Bsa.Hardware
             /// </summary>
             public const ushort InvalidState = 1;
         }
+
+        /// <summary>
+        /// Contains constants for well-known hardware errors for class <see cref="HardwareErrorClass.Unsupported"/>
+        /// </summary>
+        public static class Unsupported
+        {
+            /// <summary>
+            /// A required generic feature is not supported by hardware and (currently) cannot be software emulated.
+            /// </summary>
+            public const short CannotBeEmulated = 0;
+
+            /// <summary>
+            /// Required acquisition mode is not supported by hardware and cannot be software emulated.
+            /// </summary>
+            public const ushort AcquisitionMode = 1;
+        }
     }
 }

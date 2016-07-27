@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -55,6 +56,7 @@
     </Compile>
     <Compile Include="Acquisition\PhysicalChannelTests.cs" />
     <Compile Include="Acquisition\AcquisitionDeviceTests.cs" />
+    <Compile Include="Acquisition\NoiseGeneratorTests.cs" />
     <Compile Include="DeviceTests.cs" />
     <Compile Include="HardwareErrorTests.cs" />
     <Compile Include="NonInstrumentedTestDevice.cs" />
@@ -69,6 +71,10 @@
     <ProjectReference Include="..\..\Bsa.Types\Bsa.Types.csproj">
       <Project>{33def731-7c8a-47d3-97fc-b9b84e1ed3f4}</Project>
       <Name>Bsa.Types</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Examples\Hardware\NoiseGenerator\NoiseGenerator\NoiseGenerator.csproj">
+      <Project>{4f99a9ff-e4ce-4555-94f5-286dacfc4389}</Project>
+      <Name>NoiseGenerator</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

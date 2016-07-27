@@ -23,9 +23,9 @@ using System.Reflection;
 namespace Bsa.Hardware
 {
     // Maps a device feature to a method in Device class to check for its availablility.
-    sealed class DeviceFeatureMethodDictionary
+    sealed class FeatureMethodDictionary
     {
-        public DeviceFeatureMethodDictionary(Device methodsContainer, string methodNameFormatString, bool mayUseMethodWithOneParameter)
+        public FeatureMethodDictionary(Device methodsContainer, string methodNameFormatString, bool mayUseMethodWithOneParameter)
         {
             _device = methodsContainer;
             _methodNameFormatString = methodNameFormatString;
@@ -73,7 +73,7 @@ namespace Bsa.Hardware
 
                 if (method != null && !IsMethodEligibleForInvocation(method))
                     method = null;
-
+                
                 _mapping.Add(feature, method);
 
                 return method;
@@ -82,7 +82,7 @@ namespace Bsa.Hardware
 
         private bool IsMethodEligibleForInvocation(MethodInfo method)
         {
-            // See FeatureCollection documentation: method must have bool return type, it can't be HideBySig and it MAY have one or zero parameters
+            // See FeatureCollection documentation: method must have bool return type, it can't be generic and it MAY have one or zero parameters
             if (method.ReturnType != typeof(bool))
                 return false;
 

@@ -27,7 +27,7 @@ namespace Bsa.Hardware
     /// Represents an error related to an hardware device.
     /// </summary>
     [Serializable]
-    public sealed class HardwareException : BsaException
+    public class HardwareException : BsaException
     {
         /// <summary>
         /// Initializes a new instance of <see cref="HardwareException"/>.
@@ -46,6 +46,7 @@ namespace Bsa.Hardware
         /// If any element of <paramref name="errors"/> is <see langword="null"/>.
         /// </exception>
         public HardwareException(IEnumerable<HardwareError> errors, Exception innerException = null)
+            : base("Unknown hardware error.", innerException)
         {
             if (errors == null)
                 throw new ArgumentNullException("errors");
