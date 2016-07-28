@@ -23,7 +23,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Hardware.Tests.Acquisition.Timing
 {
     [TestClass]
-    public class BasicSamplesCounterClockTests
+    public sealed class BasicSamplesCounterClockTests
     {
         [TestMethod]
         public void AutoInitializesReferenceAndCount()

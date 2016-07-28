@@ -23,7 +23,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Hardware.Tests
 {
     [TestClass]
-    public class DeviceFeatureTests
+    public sealed class DeviceFeatureTests
     {
         [TestMethod]
         public void EqualityIsByName()

@@ -23,7 +23,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Hardware.Tests
 {
     [TestClass]
-    public class HardwareErrorTests
+    public sealed class HardwareErrorTests
     {
         [TestMethod]
         public void CanCreateType()

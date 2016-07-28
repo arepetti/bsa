@@ -25,7 +25,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Tests.Instrumentation
 {
     [TestClass]
-    public class TelemetrySessionTests
+    public sealed class TelemetrySessionTests
     {
         [TestInitialize]
         public void Initialize()

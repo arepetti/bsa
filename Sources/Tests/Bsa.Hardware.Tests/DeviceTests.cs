@@ -23,7 +23,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Hardware.Tests
 {
     [TestClass]
-    public class DeviceTests
+    public sealed class DeviceTests
     {
         [TestMethod]
         public void CanCreateOpenAndDispose()

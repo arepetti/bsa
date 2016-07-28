@@ -17,38 +17,27 @@
 //
 
 using System;
-using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bsa.Tests
+namespace Bsa.Dsp
 {
-    [TestClass]
-    public sealed class DisposableTests
+    /// <summary>
+    /// Interface implemented by online fitlers whose process a samples stream one by one.
+    /// </summary>
+    public interface IOnlineFilter : IDisposable
     {
-        [TestMethod]
-        public void NormalUsage()
-        {
-            using (var disposable = new TestObject())
-            {
-                disposable.DoSomething();
-            }
-        }
+        /// <summary>
+        /// Processes specified sample.
+        /// </summary>
+        /// <param name="sample">Sample to process.</param>
+        /// <returns>
+        /// Specified sample, fitlered according to filter's coefficients (when applicable) and
+        /// current state (when applicable).
+        /// </returns>
+        double Process(double sample);
 
-        [TestMethod]
-        [ExpectedException(typeof(ObjectDisposedException))]
-        public void ThrowIfDisposed()
-        {
-            var disposable = new TestObject();
-            ((IDisposable)disposable).Dispose();
-            disposable.DoSomething();
-        }
-
-        private sealed class TestObject : Disposable
-        {
-            public void DoSomething()
-            {
-                ThrowIfDisposed();
-            }
-        }
+        /// <summary>
+        /// Reset filter's state (when applicable).
+        /// </summary>
+        void Reset();
     }
 }

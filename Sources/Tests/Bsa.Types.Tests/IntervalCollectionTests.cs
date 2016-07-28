@@ -23,7 +23,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Tests
 {
     [TestClass]
-    public class IntervalCollectionTests
+    public sealed class IntervalCollectionTests
     {
         [TestMethod]
         public void Contains()

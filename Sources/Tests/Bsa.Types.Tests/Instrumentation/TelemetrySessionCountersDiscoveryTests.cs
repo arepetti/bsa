@@ -25,7 +25,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Bsa.Tests.Instrumentation
 {
     [TestClass]
-    public class TelemetrySessionCountersDiscoveryTests
+    public sealed class TelemetrySessionCountersDiscoveryTests
     {
         [TestMethod]
         public void CanFindDeclaredCounters()
