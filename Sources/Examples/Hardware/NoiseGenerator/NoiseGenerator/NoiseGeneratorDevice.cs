@@ -24,6 +24,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Bsa.Hardware.Acquisition;
+using Bsa.Hardware.Acquisition.Timing;
 using Bsa.Instrumentation;
 
 namespace Bsa.Examples.Hardware.NoiseGenerator
@@ -86,13 +87,16 @@ namespace Bsa.Examples.Hardware.NoiseGenerator
         {
             base.SetupCore();
 
+            double samplingRate = Channels.First().SamplingRate;
+
+            _timestampGenerator = new SamplesCounterClock(samplingRate, SamplesCounterClockOptions.Default);
             _generators = Channels.Select(x => new Generator(x.Id, x.Range)).ToArray();
 
             // This is an example, a true device driver should not generate one sample
             // for each tick (better to pack them in bigger DataPacket) and also interval measurement
             // should be more precise. Expect floating point errors (and 1 ms rounding!) if you calculate
             // timer interval in this way.
-            TimeSpan timerInterval = TimeSpan.FromSeconds(1 / Channels.First().SamplingRate);
+            TimeSpan timerInterval = TimeSpan.FromSeconds(1 / samplingRate);
             _dataTimer = new System.Threading.Timer(OnDataTimerTick, null, TimeSpan.Zero, timerInterval);
         }
 
@@ -109,6 +113,7 @@ namespace Bsa.Examples.Hardware.NoiseGenerator
         private readonly Random _randomImpedanceGenerator = new Random();
         private Generator[] _generators;
         private System.Threading.Timer _dataTimer, _ohmeterTimer;
+        private SamplesCounterClock _timestampGenerator;
 
         private bool IsFeatureOhmeterAvailable()
         {
@@ -148,11 +153,7 @@ namespace Bsa.Examples.Hardware.NoiseGenerator
             for (int i = 0; i < samples.Length; ++i)
                 samples[i] = new double[] { NextValueForChannel(i) };
 
-            // Note that here we're using DateTime.Now but it's a serious error in true
-            // code: this clock is not monotinic increasing, it's unrelated to interval timing
-            // and it's time consuming to calculate. See other examples for a more reliable implementation
-            // of timestamp calculation (if it's not provided by device itself).
-            OnData(new DataEventArgs(new DataPacket(Id, DateTime.Now, samples)));
+            OnData(new DataEventArgs(new DataPacket(Id, _timestampGenerator.Increase(1), samples)));
         }
 
         private void OnOhmeterTimerTick(object state)
