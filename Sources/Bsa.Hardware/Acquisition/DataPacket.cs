@@ -55,7 +55,7 @@ namespace Bsa.Hardware.Acquisition
         /// Single elements may be <see langword="null"/> if no data has been acquired for that
         /// channel however not every consumer may support this <em>feature</em>.
         /// </param>
-        public DataPacket(Guid driverId, DateTime timestamp, double[][] samples)
+        public DataPacket(Guid driverId, DateTimeOffset timestamp, double[][] samples)
         {
             if (samples == null)
                 throw new ArgumentNullException("samples");
@@ -85,7 +85,7 @@ namespace Bsa.Hardware.Acquisition
         /// Timestamp of the first sample of <see cref="Samples"/>. During acquisition, for a sequence of packets,
         /// this time is a monotonic increasing clock.
         /// </value>
-        public DateTime? Timestamp
+        public DateTimeOffset? Timestamp
         {
             get { return _timestamp; }
         }
@@ -108,7 +108,7 @@ namespace Bsa.Hardware.Acquisition
         }
 
         private readonly Guid _acquisitionDeviceDriverId;
-        private readonly DateTime _timestamp;
+        private readonly DateTimeOffset _timestamp;
         private readonly double[][] _samples;
     }
 }
