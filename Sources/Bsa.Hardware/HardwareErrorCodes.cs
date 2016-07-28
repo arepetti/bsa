@@ -34,6 +34,16 @@ namespace Bsa.Hardware
             /// Unknown error.
             /// </summary>
             public const ushort Unknown = 0;
+
+            /// <summary>
+            /// An hardware of software limit has been reached.
+            /// </summary>
+            public const ushort LimitReached = 1;
+
+            /// <summary>
+            /// Timeout error, an operation cannot be completed within the maximum allowed time.
+            /// </summary>
+            public const ushort Timeout = 2;
         }
 
         /// <summary>

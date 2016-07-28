@@ -54,10 +54,14 @@
     <Compile Include="Acquisition\AcquisitionMode.cs" />
     <Compile Include="Acquisition\DataEventArgs.cs" />
     <Compile Include="Acquisition\DataPacket.cs" />
+    <Compile Include="Acquisition\Timing\SamplesCounterClock.cs" />
+    <Compile Include="Acquisition\Timing\SamplesCounterClockOptions.cs" />
+    <Compile Include="Acquisition\Timing\TimestampGenerator.cs" />
     <Compile Include="Acquisition\OhmeterEventArgs.cs" />
     <Compile Include="Acquisition\PhysicalChannel.cs" />
     <Compile Include="Acquisition\PhysicalChannelCollection.cs" />
     <Compile Include="Acquisition\PhysicalChannelImpedance.cs" />
+    <Compile Include="Acquisition\Timing\TimestampGeneratorProperties.cs" />
     <Compile Include="ComparisonExtensions.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="ConnectionState.cs" />

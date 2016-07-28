@@ -57,6 +57,7 @@
     <Compile Include="Acquisition\PhysicalChannelTests.cs" />
     <Compile Include="Acquisition\AcquisitionDeviceTests.cs" />
     <Compile Include="Acquisition\NoiseGeneratorTests.cs" />
+    <Compile Include="Acquisition\Timing\BasicSamplesCounterClockTests.cs" />
     <Compile Include="DeviceTests.cs" />
     <Compile Include="HardwareErrorTests.cs" />
     <Compile Include="NonInstrumentedTestDevice.cs" />
