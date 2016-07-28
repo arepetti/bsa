@@ -87,5 +87,15 @@ namespace Bsa.Hardware.Tests.Acquisition.Timing
             // Now reference time has been "regenerated"
             Assert.AreNotEqual(time, clock.Reference.Value);
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(HardwareException))]
+        public void StopsWhenTimestampIsOutOfRange()
+        {
+            // Sampling rate should be small to enough to fail quickly
+            var clock = new SamplesCounterClock(0.000001, SamplesCounterClockOptions.Default);
+            while (true)
+                clock.Increase(UInt32.MaxValue);
+        }
     }
 }

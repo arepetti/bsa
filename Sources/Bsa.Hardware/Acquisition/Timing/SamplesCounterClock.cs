@@ -120,7 +120,7 @@ namespace Bsa.Hardware.Acquisition.Timing
         /// <param name="numberOfSamples">Number of newly acquired samples</param>
         /// <returns>
         /// The timestamp of the first newly acquired sample, for example if 10 samples have been acquired
-        /// (<paramref name="numberOfSamples"/> is 0) then this timestamp refers to sample #1 (the one with index
+        /// (<paramref name="numberOfSamples"/> is 10) then this timestamp refers to sample #1 (the one with index
         /// 0 in an hypotetical <c>double[10]</c> array of samples). If <paramref name="numberOfSamples"/> is
         /// 0 then returned value is <see cref="Current"/>.
         /// </returns>
@@ -139,7 +139,7 @@ namespace Bsa.Hardware.Acquisition.Timing
         /// by a wrong setup where you acquire much faster than supposed sampling rate. In this case error cannot be
         /// managed internally and exception will always be thrown.
         /// <br/>-or-<br/>
-        /// If number of acquired samples is reached and <see cref="SamplesCounterClockOptions.AdjustForOverflow"/>
+        /// If maximum number of acquired samples is reached and <see cref="SamplesCounterClockOptions.AdjustForOverflow"/>
         /// is specified but new reference time cannot be acquired in a reasonable amount of time; error
         /// will be <see cref="HardwareErrorClass.Generic"/> with error code <see cref="HardwareErrorCodes.Generic.Timeout"/>.
         /// </exception>
