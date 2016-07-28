@@ -77,7 +77,7 @@ namespace Bsa.Hardware
         /// if <paramref name="message"/> is a null or blank string.
         /// </exception>
         public HardwareError(HardwareErrorSeverity severity, string message)
-            : this(severity, HardwareErrorClass.Generic, HardwareErrorCodes.Generic.UnknownError, message)
+            : this(severity, HardwareErrorClass.Generic, HardwareErrorCodes.Generic.Unknown, message)
         {
         }
 

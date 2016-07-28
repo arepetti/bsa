@@ -33,7 +33,7 @@ namespace Bsa.Hardware
             /// <summary>
             /// Unknown error.
             /// </summary>
-            public const ushort UnknownError = 0;
+            public const ushort Unknown = 0;
         }
 
         /// <summary>
@@ -42,9 +42,14 @@ namespace Bsa.Hardware
         public static class Internal
         {
             /// <summary>
+            /// Generic error (and there is not a more specific error code).
+            /// </summary>
+            public const ushort Generic = 0;
+
+            /// <summary>
             /// Driver performed an invalid or unexpected operation, this error is often caused by a programming error.
             /// </summary>
-            public const ushort InvalidOperation = 0;
+            public const ushort InvalidOperation = 1;
         }
 
         /// <summary>
@@ -53,9 +58,14 @@ namespace Bsa.Hardware
         public static class Arguments
         {
             /// <summary>
+            /// Generic error (and there is not a more specific error code).
+            /// </summary>
+            public const ushort Generic = 0;
+
+            /// <summary>
             /// Supplied arguments or configuration for channels is not valid.
             /// </summary>
-            public const ushort InvalidChannelConfiguration = 0;
+            public const ushort InvalidChannelConfiguration = 1;
         }
 
         /// <summary>
@@ -64,14 +74,19 @@ namespace Bsa.Hardware
         public static class State
         {
             /// <summary>
+            /// Generic error (and there is not a more specific error code).
+            /// </summary>
+            public const ushort Generic = 0;
+
+            /// <summary>
             /// Device (or driver) state cannot be changed (in this moment or for this configuration).
             /// </summary>
-            public const ushort CannotChangeState = 0;
+            public const ushort CannotChangeState = 1;
 
             /// <summary>
             /// An operation cannot be performed while driver/device is in the current state.
             /// </summary>
-            public const ushort InvalidState = 1;
+            public const ushort InvalidState = 2;
         }
 
         /// <summary>
@@ -80,14 +95,19 @@ namespace Bsa.Hardware
         public static class Unsupported
         {
             /// <summary>
+            /// Generic error (and there is not a more specific error code).
+            /// </summary>
+            public const ushort Generic = 0;
+
+            /// <summary>
             /// A required generic feature is not supported by hardware and (currently) cannot be software emulated.
             /// </summary>
-            public const short CannotBeEmulated = 0;
+            public const ushort CannotBeEmulated = 1;
 
             /// <summary>
             /// Required acquisition mode is not supported by hardware and cannot be software emulated.
             /// </summary>
-            public const ushort AcquisitionMode = 1;
+            public const ushort AcquisitionMode = 2;
         }
     }
 }
