@@ -53,6 +53,7 @@ namespace Bsa.Hardware.Acquisition
         /// within the same process, in multiple process and in a network of connected computers.
         /// </value>
         /// <seealso cref="HardwareId"/>
+        /// <seealso cref="DataPacket.AcquisitionDeviceDriverId"/>
         public Guid Id
         {
             get { return _id; }
