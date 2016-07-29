@@ -13,25 +13,18 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
+// along with BSA-F. If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
 
-namespace Bsa.Dsp
+namespace Bsa.Dsp.Filters
 {
-    /// <summary>
-    /// Interface implemented by online filters whose process a samples stream one by one.
-    /// </summary>
-    /// <remarks>
-    /// While a generic <see cref="IOnlineProcessor"/> does not require even spaced samples
-    /// a filter usually does not work if samples are not equally spaced.
-    /// </remarks>
-    public interface IOnlineFilter : IOnlineProcessor
+    sealed class SavitzkyGolayFilterDesigner : OnlineFilterDesigner
     {
-        /// <summary>
-        /// Reset filter's state (when applicable).
-        /// </summary>
-        void Reset();
+        public override IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

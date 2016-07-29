@@ -21,17 +21,24 @@ using System;
 namespace Bsa.Dsp
 {
     /// <summary>
-    /// Interface implemented by online filters whose process a samples stream one by one.
+    /// Interface implemented by online processors whose process a samples stream one by one.
     /// </summary>
     /// <remarks>
-    /// While a generic <see cref="IOnlineProcessor"/> does not require even spaced samples
-    /// a filter usually does not work if samples are not equally spaced.
+    /// Note that processors and filters are different because processors are strictly stateless:
+    /// you can imagine <c>Amplifier</c>, <c>Inverter</c> and <c>Rectifier</c> processors. Processors
+    /// may also be used to <em>change</em> signal (for exmaple to perform a conversion from <em>raw</em>
+    /// values acquired by hardware device (expressed in the range of input channel) to generic
+    /// abstract samples expressed in another unit of measure (or to perform linearization, if required).
     /// </remarks>
-    public interface IOnlineFilter : IOnlineProcessor
+    public interface IOnlineProcessor : IDisposable
     {
         /// <summary>
-        /// Reset filter's state (when applicable).
+        /// Processes specified sample.
         /// </summary>
-        void Reset();
+        /// <param name="sample">Sample to process.</param>
+        /// <returns>
+        /// Specified sample processed by this <c>IOnlineProcessor</c>.
+        /// </returns>
+        double Process(double sample);
     }
 }

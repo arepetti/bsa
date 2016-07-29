@@ -18,20 +18,23 @@
 
 using System;
 
-namespace Bsa.Dsp
+namespace Bsa.Dsp.Filters
 {
-    /// <summary>
-    /// Interface implemented by online filters whose process a samples stream one by one.
-    /// </summary>
-    /// <remarks>
-    /// While a generic <see cref="IOnlineProcessor"/> does not require even spaced samples
-    /// a filter usually does not work if samples are not equally spaced.
-    /// </remarks>
-    public interface IOnlineFilter : IOnlineProcessor
+    public class ChebyshevFilterDesignSettings : FilterDesignSettings
     {
-        /// <summary>
-        /// Reset filter's state (when applicable).
-        /// </summary>
-        void Reset();
+        public double? MaximumRipple
+        {
+            get { return _maximumRipple; }
+            set
+            {
+                if (value.HasValue)
+                {
+                    if (value.Value < 0 || Double.IsNaN(value.Value) || Double.IsPositiveInfinity(value.Value))
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        private double? _maximumRipple;
     }
 }

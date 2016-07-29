@@ -18,20 +18,24 @@
 
 using System;
 
-namespace Bsa.Dsp
+namespace Bsa.Dsp.Filters
 {
-    /// <summary>
-    /// Interface implemented by online filters whose process a samples stream one by one.
-    /// </summary>
-    /// <remarks>
-    /// While a generic <see cref="IOnlineProcessor"/> does not require even spaced samples
-    /// a filter usually does not work if samples are not equally spaced.
-    /// </remarks>
-    public interface IOnlineFilter : IOnlineProcessor
+    public class FilterDesignSettings : FilterDesignSettingsBase
     {
-        /// <summary>
-        /// Reset filter's state (when applicable).
-        /// </summary>
-        void Reset();
+        public int Order
+        {
+            get { return _order; }
+            set
+            {
+                // Order 0 means that order is not applicable for this kind of filter,
+                // each designer will throw an exception if this value is not appropriate
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException();
+
+                _order = value;
+            }
+        }
+
+        private int _order;
     }
 }
