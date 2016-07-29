@@ -20,56 +20,156 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Base class for filter designers.
+    /// </summary>
+    /// <remarks>
+    /// Each derived class (a specific designer) will implement one or more of factory methods exposed by
+    /// this base class. Unimplemented methods (when a default implementation is not available) will throw
+    /// <see cref="NotSupportedException"/>.
+    /// </remarks>
     public abstract class OnlineFilterDesigner
     {
-        public virtual IOnlineFilter CreateAllPass(FilterDesignSettings settings)
+        /// <summary>
+        /// Creates an all-pass filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateAllPass(FilterDesignSettings settings)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
+        /// <summary>
+        /// Creates a low-pass filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="frequency">Cutoff frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreateHighPass(FilterDesignSettings settings, double frequency)
+        /// <summary>
+        /// Creates a high-pass filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="frequency">Cutoff frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateHighPass(FilterDesignSettings settings, double frequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreateBandStop(FilterDesignSettings settings, double lowFrequency, double highFrequency)
+        /// <summary>
+        /// Creates a band-stop filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="lowFrequency">Low cutoff frequency.</param>
+        /// <param name="highFrequency">High cutoff frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateBandStop(FilterDesignSettings settings, double lowFrequency, double highFrequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreateBandPass(FilterDesignSettings settings, double lowFrequency, double highFrequency)
+        /// <summary>
+        /// Creates a band-pass filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="lowFrequency">Low cutoff frequency.</param>
+        /// <param name="highFrequency">High cutoff frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateBandPass(FilterDesignSettings settings, double lowFrequency, double highFrequency)
         {
-            return ThrowNotSupported();
+            // Default implementation if there is not a better designer-specific version, if one of required
+            // filters (for example one designer implements low-pass but not high-pass) isn't supported then it will
+            // still throw a NotSupportedException for the missing layout.
+            return CreateCascadeFilter(
+                CreateHighPass(settings, lowFrequency),
+                CreateLowPass(settings, highFrequency));
         }
 
-        public virtual IOnlineFilter CreateLowShelf(FilterDesignSettings settings, double frequency)
+        /// <summary>
+        /// Creates a low-shelf filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="frequency">Cutoff frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateLowShelf(FilterDesignSettings settings, double frequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreateHighShelf(FilterDesignSettings settings, double frequency)
+        /// <summary>
+        /// Creates a high-shelf filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="frequency">Cutoff frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateHighShelf(FilterDesignSettings settings, double frequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreateNotch(FilterDesignSettings settings, double frequency)
+        /// <summary>
+        /// Creates a notch filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="frequency">Notch frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateNotch(FilterDesignSettings settings, double frequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        public virtual IOnlineFilter CreatePeak(FilterDesignSettings settings, double frequency)
+        /// <summary>
+        /// Creates a peak filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <param name="frequency">Peak frequency.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreatePeak(FilterDesignSettings settings, double frequency)
         {
-            return ThrowNotSupported();
+            return NotSupported();
         }
 
-        private static IOnlineFilter ThrowNotSupported()
+        private static IOnlineFilter NotSupported()
         {
             throw new NotSupportedException("This filter type is not supported by this filter designer.");
+        }
+
+        private static IOnlineFilter CreateCascadeFilter(params IOnlineFilter[] filters)
+        {
+            throw new NotImplementedException();
         }
     }
 }

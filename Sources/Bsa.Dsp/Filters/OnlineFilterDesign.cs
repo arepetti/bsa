@@ -20,40 +20,72 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Represents a filter design.
+    /// </summary>
     public static class OnlineFilterDesign
     {
+        /// <summary>
+        /// Contains Infinite Impulse Response (IIR) filter designers.
+        /// </summary>
         public static class Iir
         {
+            /// <summary>
+            /// Gets a Type I Chebyshev filter designer. It supports all filter types but <see cref="FilterType.AllPass"/>.
+            /// </summary>
             /// <remarks>
-            /// Fisher's method. It's widely used (in EEG, for example, is common when cutoff is far away from frequency range of interest).
+            /// Filter is calculated using Fisher's method.
+            /// It's widely used (in EEG, for example, is common when cutoff is far away from frequency range of interest).
             /// </remarks>
             public static readonly OnlineFilterDesigner ChebyshevI = new ChebyshevIOnlineFilterDesigner();
 
+            /// <summary>
+            /// Gets a Type II Chebyshev filter designer. It supports all filter types but <see cref="FilterType.AllPass"/>.
+            /// </summary>
             /// <remarks>
-            /// Fisher's method. It's widely used (in EEG, for example, is common when cutoff is far away from frequency range of interest).
+            /// Filter is calculated using Fisher's method.
+            /// It's widely used (in EEG, for example, is common when cutoff is far away from frequency range of interest).
             /// </remarks>
             public static readonly OnlineFilterDesigner ChebyshevII = new ChebyshevIIOnlineFilterDesigner();
 
+            /// <summary>
+            /// Gets a Butterworth filter designer. It supports all filter types but <see cref="FilterType.AllPass"/>, shelf and peak filters.
+            /// </summary>
             /// <remarks>
             /// Fisher's method. This filter design is extremely common in EEG signal processing (especially for band-pass filters when inside
             /// frequency range of interest).
             /// </remarks>
             public static readonly OnlineFilterDesigner Butterworth = new ButterworthOnlineFilterDesigner();
 
+            /// <summary>
+            /// Gets a RBJ filter designer. It supports all filter types.
+            /// </summary>
             /// <remarks>
-            /// Very common in some niche applications (especially for some cumb filters) and in audio processing.
+            /// Very common in some niche applications and in audio processing for building equalizers. They perform especially well,
+            /// for some type of data, when used to build a big cascade of filters (for example notches).
+            /// Detailed description at http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt.
             /// </remarks>
             public static readonly OnlineFilterDesigner Rbj = new RbjFilterDesigner();
         }
 
+        /// <summary>
+        /// Contains Finite Impulse Response (FIR) filter designers.
+        /// </summary>
         public static class Fir
         {
+            /// <summary>
+            /// Gets the Parks/McClellan filter designer. This algorithm shapes a FIR Chebyshev filter. It supports
+            /// <see cref="FilterType.LowPass"/>, <see cref="FitlerType.HighPass"/> and <see cref="FilterType.BandPass"/>.
+            /// </summary>
             /// <remarks>
             /// Very common and widely used implementation, decent overall performance it's multi-purpose.
             /// </remarks>
             public static readonly OnlineFilterDesigner ParksMcClellan = new ParksMcClellanOnlineFilterDesigner();
         }
 
+        /// <summary>
+        /// Gets the Savitzky/Golay filter designer. It supports only <see cref="FilterType.AllPass"/>.
+        /// </summary>
         /// <remarks>
         /// This filter has better performance than a simple moving average (which is just a special case of this where <c>k=0</c> and <c>Y=a0</c>)
         /// for filtering of some signals, for example ECG (see also <em>Determination of Signal to Noise Ratio of Electrocardiograms Filtered by Band Pass

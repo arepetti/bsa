@@ -21,8 +21,37 @@ using System.ComponentModel;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Factory class for online filters.
+    /// </summary>
     public static class OnlineFilterFactory
     {
+        /// <overload>
+        /// Creates a new filter.
+        /// </overload>
+        /// <summary>
+        /// Creates a new all-pass filter.
+        /// </summary>
+        /// <param name="type">Type of the filter, it must be <see cref="FilterType.AllPass"/>.</param>
+        /// <param name="design">Designer used to build the filter (it must support creation of an all-pass filter).</param>
+        /// <param name="settings">
+        /// Settings for the filter (base class <see cref="FilterDesignSettings"/> may be used if you do not want to specify
+        /// any of extra settings supported by designer for this specific type of filter).
+        /// </param>
+        /// <returns>
+        /// An on-line filter with specified type and characteristics.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="design"/> is <see langword="null"/>.
+        /// <br/>-or-<br/>
+        /// If <paramref name="settings"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="type"/> is not <see cref="FilterType.AllPass"/>.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If specified <paramref name="design"/> does not support required filter <paramref name="type"/>.
+        /// </exception>
         public static IOnlineFilter Create(FilterType type, OnlineFilterDesigner design, FilterDesignSettings settings)
         {
             if (type != FilterType.AllPass)
@@ -33,6 +62,37 @@ namespace Bsa.Dsp.Filters
             return design.CreateAllPass(settings);
         }
 
+        /// <summary>
+        /// Creates a new filter with specified cutoff frequency.
+        /// </summary>
+        /// <param name="type">
+        /// Type of the filter, it must be a filter with a single cutoff frequency (not <see cref="FilterType.AllPass"/>
+        /// or another band filter).
+        /// </param>
+        /// <param name="design">Designer used to build the filter (it must support creation of required filter).</param>
+        /// <param name="settings">
+        /// Settings for the filter (base class <see cref="FilterDesignSettings"/> may be used if you do not want to specify
+        /// any of extra settings supported by designer for this specific type of filter).
+        /// </param>
+        /// <param name="frequency">Cutoff frequency for this filter.</param>
+        /// <returns>
+        /// An on-line filter with specified type and characteristics.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="design"/> is <see langword="null"/>.
+        /// <br/>-or-<br/>
+        /// If <paramref name="settings"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If <paramref name="frequency"/> is 0 or less or <see cref="Double.NaN"/> or <see cref="Double.PositiveInfinity"/>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="type"/> is not a filter with a single cutoff frequency (<see cref="FilterType.AllPass"/>,
+        /// <see cref="FilterType.BandPass"/> and <see cref="FilterType.BandStop"/> cannot be created with this function).
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If specified <paramref name="design"/> does not support required filter <paramref name="type"/>.
+        /// </exception>
         public static IOnlineFilter Create(FilterType type, OnlineFilterDesigner design, FilterDesignSettings settings, double frequency)
         {
             ValidateSettingsWithDesigner(design, settings);
@@ -61,11 +121,46 @@ namespace Bsa.Dsp.Filters
             }
         }
 
+        /// <summary>
+        /// Creates a new band filter.
+        /// </summary>
+        /// <param name="type">
+        /// Type of the filter, it must be a band filter with a single cutoff frequency (not <see cref="FilterType.AllPass"/>
+        /// or another single cutoff frequency filter).
+        /// </param>
+        /// <param name="design">Designer used to build the filter (it must support creation of required filter).</param>
+        /// <param name="settings">
+        /// Settings for the filter (base class <see cref="FilterDesignSettings"/> may be used if you do not want to specify
+        /// any of extra settings supported by designer for this specific type of filter).
+        /// </param>
+        /// <param name="band">Frequency band of this filter.</param>
+        /// <returns>
+        /// An on-line filter with specified type and characteristics.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="design"/> is <see langword="null"/>.
+        /// <br/>-or-<br/>
+        /// If <paramref name="settings"/> is <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If one of the frequencies is 0 or less or <see cref="Double.NaN"/> or <see cref="Double.PositiveInfinity"/>.
+        /// <br/>-or-<br/>
+        /// If <c>band.Minimum</c> is greater than <c>band.Maximum</c>.
+        /// </exception>
+        /// <exception cref="ArgumentException">
+        /// If <paramref name="type"/> is not a band filter.
+        /// </exception>
+        /// <exception cref="NotSupportedException">
+        /// If specified <paramref name="design"/> does not support required filter <paramref name="type"/>.
+        /// </exception>
         public static IOnlineFilter Create(FilterType type, OnlineFilterDesigner design, FilterDesignSettings settings, Range<double> band)
         {
             ValidateSettingsWithDesigner(design, settings);
             ValidateFrequency(band.Minimum);
             ValidateFrequency(band.Maximum);
+
+            if (band.Maximum < band.Minimum)
+                throw new ArgumentOutOfRangeException("band");
 
             if (type == FilterType.BandPass)
                 return design.CreateBandPass(settings, band.Minimum, band.Maximum);
@@ -83,17 +178,15 @@ namespace Bsa.Dsp.Filters
             if (settings == null)
                 throw new ArgumentNullException("settings");
 
-            if (settings.Order <= 0)
-                throw new ArgumentOutOfRangeException("Filter order cannot be zero or negative", "settings.Order");
-
-            if (settings.SamplingRate <= 0)
-                throw new ArgumentOutOfRangeException("Sampling rate cannot be zero or negative.", "settings.SamplingRate");
+            // Add here more (generic) validation when required...
         }
 
         private static void ValidateFrequency(double frequency)
         {
             if (Double.IsNaN(frequency) || Double.IsInfinity(frequency))
                 throw new ArgumentOutOfRangeException("Cutoff frequency cannot be NaN or Infinity.", "frequency");
+
+            // TODO: should also check frequency vs sampling rate?
         }
     }
 }

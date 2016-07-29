@@ -20,16 +20,65 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Represents the type of a filter.
+    /// </summary>
+    /// <remarks>
+    /// Not all filter designers support all filter types, see documentation of each designer
+    /// for a detailed list of supported filter types.
+    /// </remarks>
     public enum FilterType
     {
+        /// <summary>
+        /// All-pass filter: passes all frequencies equally in gain, but changes the phase
+        /// relationship among various frequencies.
+        /// </summary>
         AllPass,
+
+        /// <summary>
+        /// Low-pass filter: passes signals with a frequency lower than a certain cutoff frequency
+        /// and attenuates signals with frequencies higher than the cutoff frequency.
+        /// </summary>
         LowPass,
+
+        /// <summary>
+        /// High-pass filter: passes signals with a frequency higher than a certain cutoff frequency
+        /// and attenuates signals with frequencies lower than the cutoff frequency
+        /// </summary>
         HighPass,
+
+        /// <summary>
+        /// Band-stop filter: passes frequencies outside a certain range and rejects (attenuates) frequencies
+        /// within that range.
+        /// </summary>
         BandStop,
+
+        /// <summary>
+        /// Band-pass filter: passes frequencies within a certain range and rejects (attenuates) frequencies
+        /// outside that range.
+        /// </summary>
         BandPass,
+
+        /// <summary>
+        /// Low-shelf filter: passes all frequencies, but increases or reduces frequencies below the shelf
+        /// frequency by specified amount.
+        /// </summary>
         LowShelf,
+
+        /// <summary>
+        /// High-shelf fitler: passes all frequencies, but increases or reduces frequencies above the shelf
+        /// frequency by specified amount.
+        /// </summary>
         HighShelf,
+
+        /// <summary>
+        /// Notch filter: stops a very narrow range of frequencies (a band-stop filter with a very high Q).
+        /// </summary>
         Notch,
+
+        /// <summary>
+        /// Peak filter: makes a peak or a dip in the frequency response.
+        /// </summary>
         Peak
     }
 }

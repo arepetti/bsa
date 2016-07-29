@@ -20,7 +20,7 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
-    public class ChebyshevFilterDesignSettings : FilterDesignSettings
+    public sealed class ChebyshevFilterDesignSettings : FilterDesignSettings
     {
         public double? MaximumRipple
         {
