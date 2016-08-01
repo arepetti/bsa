@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoiseGenerator", "Examples\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsa.Dsp", "Bsa.Dsp\Bsa.Dsp.csproj", "{F9C87D4B-9A15-40DF-8D1C-0588EDA864C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsa.Dsp.Tests", "Bsa.Dsp.Tests\Bsa.Dsp.Tests.csproj", "{ADA15D06-D16D-48EB-B415-E6F7821372C7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bsa.Dsp.Tests", "Tests\Bsa.Dsp.Tests\Bsa.Dsp.Tests.csproj", "{ADA15D06-D16D-48EB-B415-E6F7821372C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

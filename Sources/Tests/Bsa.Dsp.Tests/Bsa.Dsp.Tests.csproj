@@ -50,14 +50,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="OnlineFilterExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Bsa.Dsp\Bsa.Dsp.csproj">
+    <ProjectReference Include="..\..\Bsa.Dsp\Bsa.Dsp.csproj">
       <Project>{f9c87d4b-9a15-40df-8d1c-0588eda864c2}</Project>
       <Name>Bsa.Dsp</Name>
     </ProjectReference>
