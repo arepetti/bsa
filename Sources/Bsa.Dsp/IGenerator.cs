@@ -13,18 +13,25 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with BSA-F. If not, see <http://www.gnu.org/licenses/>.
+// along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp
 {
-    sealed class SavitzkyGolayFilterDesigner : OnlineFilterDesigner
+    /// <summary>
+    /// Interface implemented by data generators.
+    /// </summary>
+    public interface IGenerator<T>
     {
-        protected internal override IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// Generates next value.
+        /// </summary>
+        /// <returns>
+        /// Generated value, range of this value is completely implementation defined.
+        /// It may be [0..1] or within any arbitrary range.
+        /// </returns>
+        T Next();
     }
 }

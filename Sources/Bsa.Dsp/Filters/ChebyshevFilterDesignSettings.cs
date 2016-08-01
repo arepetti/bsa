@@ -20,8 +20,21 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Contains settings to design a Chebyshev filter.
+    /// </summary>
     public sealed class ChebyshevFilterDesignSettings : FilterDesignSettings
     {
+        /// <summary>
+        /// Gets/sets the maximum ripple (in dB) for this filter.
+        /// </summary>
+        /// <value>
+        /// The maximum ripple (in dB) for this filter or <see langword="null"/> if this value is unspecified
+        /// and default/optimal should be used.
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If value is less than zero or <see cref="Double.NaN"/> or <see cref="Double.PositiveInfinity"/>.
+        /// </exception>
         public double? MaximumRipple
         {
             get { return _maximumRipple; }
@@ -32,6 +45,8 @@ namespace Bsa.Dsp.Filters
                     if (value.Value < 0 || Double.IsNaN(value.Value) || Double.IsPositiveInfinity(value.Value))
                         throw new ArgumentOutOfRangeException();
                 }
+
+                _maximumRipple = value;
             }
         }
 

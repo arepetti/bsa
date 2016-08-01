@@ -20,8 +20,24 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Base class for all the filter design settings.
+    /// </summary>
     public abstract class FilterDesignSettingsBase
     {
+        /// <summary>
+        /// Gets/sets the sampling rate of data to filter.
+        /// </summary>
+        /// <value>
+        /// The sampling rate (in Hz) of data to filter. Default value is 0 and it's an invalid input
+        /// for most filters (it has to be assigned before use).
+        /// </value>
+        /// <remarks>
+        /// Even if sampling <em>rate</em> is technically the incorrect word for this value I found that it
+        /// is in such common use that moving to sampling <em>frequency</em> or sampling <em>period</em>
+        /// would be even more confusing. Don't forget that (unless we introduce a <c>Quantity</c> object
+        /// which embeds its unit of measure) this value is always expressed in Hertz.
+        /// </remarks>
         public double SamplingRate
         {
             get { return _samplingRate; }

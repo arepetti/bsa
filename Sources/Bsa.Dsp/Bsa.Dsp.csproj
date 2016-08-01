@@ -46,11 +46,29 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Filters\ButterworthOnlineFilterDesigner.cs" />
+    <Compile Include="Filters\ChebyshevFilterDesignSettings.cs" />
+    <Compile Include="Filters\ChebyshevIIOnlineFilterDesigner.cs" />
+    <Compile Include="Filters\ChebyshevIOnlineFilterDesigner.cs" />
+    <Compile Include="Filters\FilterDesignSettings.cs" />
+    <Compile Include="Filters\FilterDesignSettingsBase.cs" />
+    <Compile Include="Filters\FilterType.cs" />
+    <Compile Include="Filters\NullFilter.cs" />
+    <Compile Include="Filters\OnlineFilterDesign.cs" />
+    <Compile Include="Filters\OnlineFilterDesigner.cs" />
+    <Compile Include="Filters\OnlineFilterFactory.cs" />
+    <Compile Include="Filters\ParksMcClellanOnlineFilterDesigner.cs" />
+    <Compile Include="Filters\RbjFilterDesigner.cs" />
+    <Compile Include="Filters\SavitzkyGolayFilterDesigner.cs" />
+    <Compile Include="Generators\NoiseGenerator.cs" />
+    <Compile Include="Generators\NormalDistribution.cs" />
+    <Compile Include="Generators\RandomNumbersGenerator.cs" />
+    <Compile Include="Generators\SamplesGenerator.cs" />
+    <Compile Include="Generators\WhiteGaussianNoiseGenerator.cs" />
+    <Compile Include="IGenerator.cs" />
     <Compile Include="IOnlineFilter.cs" />
     <Compile Include="IOnlineProcessor.cs" />
-    <Compile Include="NullFilter.cs" />
     <Compile Include="OnlineFilterExtensions.cs" />
-    <Compile Include="OnlineFilterFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -65,7 +83,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Filters\" />
     <Folder Include="Processors\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

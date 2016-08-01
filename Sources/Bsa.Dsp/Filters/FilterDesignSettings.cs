@@ -20,8 +20,21 @@ using System;
 
 namespace Bsa.Dsp.Filters
 {
+    /// <summary>
+    /// Contains settings for most filter designers.
+    /// </summary>
     public class FilterDesignSettings : FilterDesignSettingsBase
     {
+        /// <summary>
+        /// Gets/sets the order (or length) of the filter.
+        /// </summary>
+        /// <value>
+        /// The order (or length) of the filter. Default value is 0 and may not be valid for some
+        /// filter designers (they may throw an exception while trying to design the filter).
+        /// </value>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// If value is less than zero.
+        /// </exception>
         public int Order
         {
             get { return _order; }

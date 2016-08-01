@@ -75,7 +75,7 @@ namespace Bsa.Dsp.Filters
         {
             /// <summary>
             /// Gets the Parks/McClellan filter designer. This algorithm shapes a FIR Chebyshev filter. It supports
-            /// <see cref="FilterType.LowPass"/>, <see cref="FitlerType.HighPass"/> and <see cref="FilterType.BandPass"/>.
+            /// <see cref="FilterType.LowPass"/>, <see cref="FilterType.HighPass"/> and <see cref="FilterType.BandPass"/>.
             /// </summary>
             /// <remarks>
             /// Very common and widely used implementation, decent overall performance it's multi-purpose.
@@ -89,7 +89,7 @@ namespace Bsa.Dsp.Filters
         /// <remarks>
         /// This filter has better performance than a simple moving average (which is just a special case of this where <c>k=0</c> and <c>Y=a0</c>)
         /// for filtering of some signals, for example ECG (see also <em>Determination of Signal to Noise Ratio of Electrocardiograms Filtered by Band Pass
-        /// and Savitzky-Golay Filters<em> by Dr. Monisha Chakrabortya and Shreya Das).
+        /// and Savitzky-Golay Filters</em> by Dr. Monisha Chakrabortya and Shreya Das).
         /// </remarks>
         public static readonly OnlineFilterDesigner SavitzkyGolay = new SavitzkyGolayFilterDesigner();
 

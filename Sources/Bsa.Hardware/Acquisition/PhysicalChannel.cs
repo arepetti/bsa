@@ -81,10 +81,10 @@ namespace Bsa.Hardware.Acquisition
         }
 
         /// <summary>
-        /// Gets or sets the sampling rate for this channel.
+        /// Gets or sets the sampling rate (in Hertz) for this channel.
         /// </summary>
         /// <value>
-        /// The sampling rate for this channel. 0 means <em>sampled on change</em> if it's supported
+        /// The sampling rate in Hertz for this channel. 0 means <em>sampled on change</em> if it's supported
         /// (see <see cref="AcquisitionDeviceFeatures.SamplingOnValueChange"/> feature) otherwise it a placeholder for an invalid value.
         /// Usage of this property is implementation defined. If hardware supports acquisition of channels with multiple frequencies
         /// (see <see cref="AcquisitionDeviceFeatures.Multifrequency"/> feature) then this value may be different for channels of the same set
@@ -94,6 +94,12 @@ namespace Bsa.Hardware.Acquisition
         /// If value is less than zero.
         /// </exception>
         /// <seealso cref="Id"/>
+        /// <remarks>
+        /// Even if sampling <em>rate</em> is technically the incorrect word for this value I found that it
+        /// is in such common use that moving to sampling <em>frequency</em> or sampling <em>period</em>
+        /// would be even more confusing. Don't forget that (unless we introduce a <c>Quantity</c> object
+        /// which embeds its unit of measure) this value is always expressed in Hertz.
+        /// </remarks>
         public double SamplingRate
         {
             get { return _samplingRate; }
