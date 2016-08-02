@@ -13,7 +13,7 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
+// along with BSA-F. If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
@@ -25,6 +25,12 @@ namespace Bsa.Hardware.Acquisition
     /// <summary>
     /// Represents a generic acquisition device for analogic signals.
     /// </summary>
+    /// <remarks>
+    /// This base class should be rarely used, most devices have a configurable set of inputs
+    /// then other components may safely assume <see cref="AcquisitionDevice{TChannel}"/> is used.
+    /// For maximum compatibility is better to derive from generic class with channels and to force
+    /// channel list to the fixed set of supported channels.
+    /// </remarks>
     public abstract class AcquisitionDevice : Device
     {
         /// <summary>
