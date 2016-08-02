@@ -29,20 +29,20 @@ namespace Bsa.Dsp
         /// Processes all specified samples and returns a new array
         /// containing processed samples.
         /// </summary>
-        /// <param name="filter">Filter instance to use for filtering <paramref name="samples"/>.</param>
+        /// <param name="processor">Processor instance to use with <paramref name="samples"/>.</param>
         /// <param name="samples">An array of samples to process.</param>
         /// <returns>
         /// A newly allocated array of samples containing all processed samples.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="filter"/> is <see langword="null"/>.
+        /// If <paramref name="processor"/> is <see langword="null"/>.
         /// <br/>-or-<br/>
         /// If <paramref name="samples"/> is <see langword="null"/>.
         /// </exception>
-        public static double[] Process(this IOnlineFilter filter, double[] samples)
+        public static double[] Process(this IOnlineProcessor processor, double[] samples)
         {
-            if (filter == null)
-                throw new ArgumentNullException("filter");
+            if (processor == null)
+                throw new ArgumentNullException("processor");
 
             if (samples == null)
                 throw new ArgumentNullException("samples");
@@ -50,7 +50,7 @@ namespace Bsa.Dsp
             double[] result = new double[samples.Length];
             
             for (int i = 0; i < result.Length; ++i)
-                result[i] = filter.Process(samples[i]);
+                result[i] = processor.Process(samples[i]);
 
             return result;
         }
@@ -59,7 +59,7 @@ namespace Bsa.Dsp
         /// Processes all specified samples and returns a new array
         /// containing processed samples.
         /// </summary>
-        /// <param name="filter">Filter instance to use for filtering <paramref name="samples"/>.</param>
+        /// <param name="processor">Processor instance to use with <paramref name="samples"/>.</param>
         /// <param name="samples">An array of samples to process.</param>
         /// <param name="startIndex">Index of the first sample to process.</param>
         /// <param name="count">Number of samples to process.</param>
@@ -68,7 +68,7 @@ namespace Bsa.Dsp
         /// array size is <paramref name="count"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="filter"/> is <see langword="null"/>.
+        /// If <paramref name="processor"/> is <see langword="null"/>.
         /// <br/>-or-<br/>
         /// If <paramref name="samples"/> is <see langword="null"/>.
         /// </exception>
@@ -81,10 +81,10 @@ namespace Bsa.Dsp
         /// If <paramref name="samples"/> does not contain at least <paramref name="count"/>
         /// samples after <paramref name="startIndex"/>.
         /// </exception>
-        public static double[] Process(this IOnlineFilter filter, double[] samples, int startIndex, int count)
+        public static double[] Process(this IOnlineProcessor processor, double[] samples, int startIndex, int count)
         {
-            if (filter == null)
-                throw new ArgumentNullException("filter");
+            if (processor == null)
+                throw new ArgumentNullException("processor");
 
             if (samples == null)
                 throw new ArgumentNullException("samples");
@@ -101,7 +101,7 @@ namespace Bsa.Dsp
             double[] result = new double[count];
 
             for (int i = 0; i < count; ++i)
-                result[i] = filter.Process(samples[startIndex + i]);
+                result[i] = processor.Process(samples[startIndex + i]);
 
             return result;
         }
@@ -110,33 +110,33 @@ namespace Bsa.Dsp
         /// Processes all specified samples and stores the result in the same
         /// input array.
         /// </summary>
-        /// <param name="filter">Filter instance to use for filtering <paramref name="samples"/>.</param>
+        /// <param name="processor">Processor instance to use with <paramref name="samples"/>.</param>
         /// <param name="samples">An array of samples to process.</param>
         /// <returns>
         /// A newly allocated array of samples containing all processed samples.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="filter"/> is <see langword="null"/>.
+        /// If <paramref name="processor"/> is <see langword="null"/>.
         /// <br/>-or-<br/>
         /// If <paramref name="samples"/> is <see langword="null"/>.
         /// </exception>
-        public static void ProcessInPlace(this IOnlineFilter filter, double[] samples)
+        public static void ProcessInPlace(this IOnlineProcessor processor, double[] samples)
         {
-            if (filter == null)
-                throw new ArgumentNullException("filter");
+            if (processor == null)
+                throw new ArgumentNullException("processor");
 
             if (samples == null)
                 throw new ArgumentNullException("samples");
 
             for (int i = 0; i < samples.Length; ++i)
-                samples[i] = filter.Process(samples[i]);
+                samples[i] = processor.Process(samples[i]);
         }
 
         /// <summary>
         /// Processes all specified samples and stores the result in the same
         /// input array.
         /// </summary>
-        /// <param name="filter">Filter instance to use for filtering <paramref name="samples"/>.</param>
+        /// <param name="processor">Processor instance to use with <paramref name="samples"/>.</param>
         /// <param name="samples">An array of samples to process.</param>
         /// <param name="startIndex">Index of the first sample to process.</param>
         /// <param name="count">Number of samples to process.</param>
@@ -144,7 +144,7 @@ namespace Bsa.Dsp
         /// A newly allocated array of samples containing all processed samples.
         /// </returns>
         /// <exception cref="ArgumentNullException">
-        /// If <paramref name="filter"/> is <see langword="null"/>.
+        /// If <paramref name="processor"/> is <see langword="null"/>.
         /// <br/>-or-<br/>
         /// If <paramref name="samples"/> is <see langword="null"/>.
         /// </exception>
@@ -157,10 +157,10 @@ namespace Bsa.Dsp
         /// If <paramref name="samples"/> does not contain at least <paramref name="count"/>
         /// samples after <paramref name="startIndex"/>.
         /// </exception>
-        public static void ProcessInPlace(this IOnlineFilter filter, double[] samples, int startIndex, int count)
+        public static void ProcessInPlace(this IOnlineProcessor processor, double[] samples, int startIndex, int count)
         {
-            if (filter == null)
-                throw new ArgumentNullException("filter");
+            if (processor == null)
+                throw new ArgumentNullException("processor");
 
             if (samples == null)
                 throw new ArgumentNullException("samples");
@@ -175,7 +175,7 @@ namespace Bsa.Dsp
                 throw new ArgumentException("There are not at least 'count' samples after 'startIndex' in 'samples' array.");
 
             for (int i = startIndex; i < startIndex + count; ++i)
-                samples[i] = filter.Process(samples[i]);
+                samples[i] = processor.Process(samples[i]);
         }
     }
 }
