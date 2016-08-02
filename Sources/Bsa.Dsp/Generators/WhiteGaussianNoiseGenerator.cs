@@ -17,33 +17,78 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bsa.Dsp.Generators
 {
-    // TODO: documentation and tests...
+    /// <summary>
+    /// Represents a Gaussian white noise generator.
+    /// </summary>
+    /// <remarks>
+    /// Please note that <see cref="NoiseGenerator.Range"/> is ignored and generated values are
+    /// 66% of them are inside the range [-1...1].
+    /// </remarks>
     public sealed class WhiteGaussianNoiseGenerator : NoiseGenerator
     {
-        public WhiteGaussianNoiseGenerator(IGenerator<double> random, double mean, double standardDeviation)
+        /// <summary>
+        /// Initializes a new instance of <see cref="WhiteGaussianNoiseGenerator"/>.
+        /// </summary>
+        /// <param name="random">
+        /// Generator from which obtain random samples used to build a white noise stream. If you do not have any
+        /// special distribution requirement you may simply use <see cref="RandomNumbersGenerator"/> and its default
+        /// parameterless constructor.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="random"/> is <see langword="null"/>.
+        /// </exception>
+        public WhiteGaussianNoiseGenerator(IGenerator<double> random)
             : base(random)
         {
-            if (Double.IsNaN(mean) || Double.IsInfinity(mean))
-                throw new ArgumentOutOfRangeException("mean");
-
-            if (standardDeviation < 0 || Double.IsNaN(standardDeviation) || Double.IsInfinity(standardDeviation))
-                throw new ArgumentOutOfRangeException("standardDeviation");
-
-            _normalDistribution = new NormalDistribution(random, mean, standardDeviation);
+            _normalDistribution = new NormalDistribution(random);
         }
 
+        /// <summary>
+        /// Initializes a new instance of <see cref="WhiteGaussianNoiseGenerator"/>.
+        /// </summary>
+        /// <param name="random">
+        /// Generator from which obtain random samples used to build a white noise stream. If you do not have any
+        /// special distribution requirement you may simply use <see cref="RandomNumbersGenerator"/> and its default
+        /// parameterless constructor.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        /// If <paramref name="random"/> is <see langword="null"/>.
+        /// </exception>
+        public WhiteGaussianNoiseGenerator(Func<double> random)
+            : this(new DelegatedGenerator(random))
+        {
+        }
+
+        /// <summary>
+        /// Generates next sample of white noise.
+        /// </summary>
+        /// <returns>Next generated white noise sample.</returns>
         public override double Next()
         {
             return _normalDistribution.Next();
         }
 
         private readonly NormalDistribution _normalDistribution;
+
+        private sealed class DelegatedGenerator : IGenerator<double>
+        {
+            public DelegatedGenerator(Func<double> function)
+            {
+                if (function == null)
+                    throw new ArgumentNullException("function");
+
+                _function = function;
+            }
+
+            public double Next()
+            {
+                return _function();
+            }
+
+            private readonly Func<double> _function;
+        }
     }
 }

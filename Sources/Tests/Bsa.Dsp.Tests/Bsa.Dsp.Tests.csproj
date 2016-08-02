@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -53,6 +54,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Generators\WhiteGaussianNoiseGeneratorTests.cs" />
     <Compile Include="OnlineFilterExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -61,7 +63,12 @@
       <Project>{f9c87d4b-9a15-40df-8d1c-0588eda864c2}</Project>
       <Name>Bsa.Dsp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Bsa.Types\Bsa.Types.csproj">
+      <Project>{33def731-7c8a-47d3-97fc-b9b84e1ed3f4}</Project>
+      <Name>Bsa.Types</Name>
+    </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
       <ItemGroup>

@@ -17,44 +17,34 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Bsa.Dsp.Generators
 {
+    /// <devdoc>
+    /// This class is not intended to be used for statistical analisys but used internally to
+    /// generate a "good enough" gaussian distribution for gaussian white noise generator.
+    /// For this reason we use an easy-to-use Box-Muller transform method (for maximum speed we may even
+    /// use Ziggurat algorithm.)
+    /// </devdoc>
     sealed class NormalDistribution
     {
-        public NormalDistribution(IGenerator<double> random, double mean, double standardDeviation)
+        public NormalDistribution(IGenerator<double> random)
         {
             Debug.Assert(random != null);
-            Debug.Assert(!Double.IsNaN(mean) && !Double.IsInfinity(mean));
-            Debug.Assert(standardDeviation >= 0 && !Double.IsNaN(standardDeviation) && !Double.IsInfinity(standardDeviation));
 
             _random = random;
-            _mean = mean;
-            _standardDeviation = standardDeviation;
         }
 
         public double Next()
         {
             Debug.Assert(_random != null);
 
-            while (true)
-            {
-                var v1 = 2 * _random.Next() - 1;
-                var v2 = 2 * _random.Next() - 1;
-
-                var r = v1 * v1 + v2 * v2;
-                if (r == 0.0 || r >= 1.0)
-                    continue;
-
-                double x = v1 * (Math.Sqrt(-2 * Math.Log(r) / r));
-                return _mean + (_standardDeviation * x);
-            }
+            double u1 = _random.Next();
+            double u2 = _random.Next();
+            return Math.Sqrt(-2.0 * Math.Log(u1)) * Math.Sin(2.0 * Math.PI * u2);
         }
 
         private readonly IGenerator<double> _random;
-        private readonly double _mean;
-        private readonly double _standardDeviation;
     }
 }
