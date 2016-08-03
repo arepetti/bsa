@@ -89,12 +89,13 @@ namespace Bsa.Dsp.Filters
         /// <remarks>
         /// This filter has better performance than a simple moving average (which is just a special case of this where <c>k=0</c> and <c>Y=a0</c>)
         /// for filtering of some signals, for example ECG (see also <em>Determination of Signal to Noise Ratio of Electrocardiograms Filtered by Band Pass
-        /// and Savitzky-Golay Filters</em> by Dr. Monisha Chakrabortya and Shreya Das).
+        /// and Savitzky-Golay Filters</em> by Dr. Monisha Chakrabortya and Shreya Das). Implementation based on
+        /// original article http://pubs.acs.org/doi/abs/10.1021/ac60214a047.
         /// </remarks>
         public static readonly OnlineFilterDesigner SavitzkyGolay = new SavitzkyGolayFilterDesigner();
 
         // TODO: bessel, biquad and elliptic? Are used enough in this field to be worth of the effort? Elliptic is often used in SMR.
-        // Note we may reuse some code from bessel filters for other IIF filters...
+        // Note we may reuse some code from bessel filters for other IIR filters...
         // Butterworth with Exstrom's method?
     }
 }
