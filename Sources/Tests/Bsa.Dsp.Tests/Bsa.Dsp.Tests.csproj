@@ -54,6 +54,9 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Generators\PrecomputedSamplesGeneratorTests.cs" />
+    <Compile Include="Generators\SamplesGeneratorTests.cs" />
+    <Compile Include="Generators\WaveGeneratorTests.cs" />
     <Compile Include="Generators\WhiteGaussianNoiseGeneratorTests.cs" />
     <Compile Include="OnlineFilterExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

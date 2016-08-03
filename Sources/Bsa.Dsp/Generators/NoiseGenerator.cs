@@ -63,6 +63,22 @@ namespace Bsa.Dsp.Generators
         }
 
         /// <summary>
+        /// Resets this generator to its initial state
+        /// resetting the random numbers generator.
+        /// </summary>
+        /// <remarks>
+        /// If a specific implementation does not use this random number generator or state
+        /// is more complex then this function has no effect or it performs a partial reset.
+        /// </remarks>
+        public override void Reset()
+        {
+            Debug.Assert(_random != null);
+
+            base.Reset();
+            _random.Reset();
+        }
+
+        /// <summary>
         /// Generates a new random number in the range [0...1].
         /// </summary>
         /// <returns>Pseudo-random number within the range [0...1].</returns>

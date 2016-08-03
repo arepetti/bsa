@@ -25,7 +25,7 @@ namespace Bsa.Dsp.Generators
     /// </summary>
     /// <remarks>
     /// Please note that <see cref="NoiseGenerator.Range"/> is ignored and generated values are
-    /// 66% of them are inside the range [-1...1].
+    /// 66% inside the range [-1...1].
     /// </remarks>
     public sealed class WhiteGaussianNoiseGenerator : NoiseGenerator
     {
@@ -57,6 +57,9 @@ namespace Bsa.Dsp.Generators
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="random"/> is <see langword="null"/>.
         /// </exception>
+        /// <remarks>
+        /// When using a delegate to generate samples calling <see cref="SamplesGenerator.Reset"/> has no effect.
+        /// </remarks>
         public WhiteGaussianNoiseGenerator(Func<double> random)
             : this(new DelegatedGenerator(random))
         {
@@ -86,6 +89,11 @@ namespace Bsa.Dsp.Generators
             public double Next()
             {
                 return _function();
+            }
+
+            public void Reset()
+            {
+                // Delegated samples generation does not support reset!
             }
 
             private readonly Func<double> _function;

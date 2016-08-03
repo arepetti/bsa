@@ -62,8 +62,13 @@
     <Compile Include="Filters\SavitzkyGolayFilterDesigner.cs" />
     <Compile Include="Generators\NoiseGenerator.cs" />
     <Compile Include="Generators\NormalDistribution.cs" />
+    <Compile Include="Generators\PreComputedSamplesGenerator.cs" />
     <Compile Include="Generators\RandomNumbersGenerator.cs" />
     <Compile Include="Generators\SamplesGenerator.cs" />
+    <Compile Include="Generators\WaveForm.cs" />
+    <Compile Include="Generators\WaveformDescription.cs" />
+    <Compile Include="Generators\WaveformFactory.cs" />
+    <Compile Include="Generators\WaveGenerator.cs" />
     <Compile Include="Generators\WhiteGaussianNoiseGenerator.cs" />
     <Compile Include="IGenerator.cs" />
     <Compile Include="IOnlineFilter.cs" />

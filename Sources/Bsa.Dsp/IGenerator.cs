@@ -13,7 +13,7 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
+// along with BSA-F. If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
@@ -33,5 +33,14 @@ namespace Bsa.Dsp
         /// It may be [0..1] or within any arbitrary range.
         /// </returns>
         T Next();
+
+        /// <summary>
+        /// Resets this generator to its initial state.
+        /// </summary>
+        /// <remarks>
+        /// This function may not be applicable for all generators, if it is not supported then
+        /// it simply does nothing.
+        /// </remarks>
+        void Reset();
     }
 }

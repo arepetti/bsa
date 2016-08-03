@@ -38,6 +38,17 @@ namespace Bsa.Dsp.Generators
         public abstract double Next();
 
         /// <summary>
+        /// Resets this generator to its initial state.
+        /// </summary>
+        /// <remarks>
+        /// This function may not be applicable for all generators, if it is not supported then
+        /// it simply does nothing.
+        /// </remarks>
+        public virtual void Reset()
+        {
+        }
+
+        /// <summary>
         /// Generates next <paramref name="count"/> samples.
         /// </summary>
         /// <param name="count">Number of samples to generate, if 0 then an empty array is returned.</param>
