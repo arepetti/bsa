@@ -29,9 +29,5 @@ namespace Bsa.Dsp
     /// </remarks>
     public interface IOnlineFilter : IOnlineProcessor
     {
-        /// <summary>
-        /// Reset filter's state (when applicable).
-        /// </summary>
-        void Reset();
     }
 }

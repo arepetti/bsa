@@ -56,7 +56,7 @@ namespace Bsa.Dsp
         /// <summary>
         /// Does nothing, this filter has no state.
         /// </summary>
-        void IOnlineFilter.Reset()
+        void IOnlineProcessor.Reset()
         {
         }
 

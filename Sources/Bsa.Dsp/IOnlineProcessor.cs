@@ -13,7 +13,7 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
+// along with BSA-F. If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
@@ -27,8 +27,10 @@ namespace Bsa.Dsp
     /// Note that processors and filters are different because processors are strictly stateless:
     /// you can imagine <c>Amplifier</c>, <c>Inverter</c> and <c>Rectifier</c> processors. Processors
     /// may also be used to <em>change</em> signal (for exmaple to perform a conversion from <em>raw</em>
-    /// values acquired by hardware device (expressed in the range of input channel) to generic
-    /// abstract samples expressed in another unit of measure (or to perform linearization, if required).
+    /// values acquired by hardware device, expressed in the range of input channel, to generic
+    /// abstract samples expressed in another unit of measure). <see cref="Reset"/> method
+    /// is declared here to have an easy-to-use cascade of processors (that may be filters
+    /// or pure processors) but usually only filters have state.
     /// </remarks>
     public interface IOnlineProcessor : IDisposable
     {
@@ -55,5 +57,10 @@ namespace Bsa.Dsp
         /// Specified sample processed by this <c>IOnlineProcessor</c>.
         /// </returns>
         double Process(double sample);
+
+        /// <summary>
+        /// Reset processor's state (when applicable).
+        /// </summary>
+        void Reset();
     }
 }
