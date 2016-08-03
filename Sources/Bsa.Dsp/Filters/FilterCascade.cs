@@ -17,42 +17,47 @@
 //
 
 using System;
+using System.Diagnostics;
 
-namespace Bsa.Dsp
+namespace Bsa.Dsp.Filters
 {
-    /// <summary>
-    /// Represents a null-filter which does nothing on its input.
-    /// </summary>
-    public sealed class NullFilter : IOnlineFilter
+    sealed class FilterCascade : IOnlineFilter
     {
-        /// <summary>
-        /// Gets a shared, thread-safe, singleton instance of this filter.
-        /// </summary>
-        public static readonly IOnlineFilter Instance = new NullFilter();
+        public FilterCascade(params IOnlineFilter[] filters)
+        {
+            Debug.Assert(filters != null);
 
-        /// <summary>
-        /// Returns the input sample, unchanged.
-        /// </summary>
-        /// <param name="sample">Sample to filter.</param>
-        /// <returns>The input sample, unchanged.</returns>
+            _filters = filters;
+        }
+
         public double Process(double sample)
         {
+            Debug.Assert(_filters != null);
+
+            foreach (var filter in _filters)
+                sample = filter.Process(sample);
+
             return sample;
         }
 
-        /// <summary>
-        /// Does nothing, this filter has no state.
-        /// </summary>
-        void IOnlineFilter.Reset()
+        public void Reset()
         {
+            Debug.Assert(_filters != null);
+
+            foreach (var filter in _filters)
+                filter.Reset();
         }
 
-        /// <summary>
-        /// Does nothing, this filter does not acquire any resource.
-        /// </summary>
         void IDisposable.Dispose()
         {
+            Debug.Assert(_filters != null);
+
+            foreach (var filter in _filters)
+                filter.Dispose();
+
             GC.SuppressFinalize(this);
         }
+
+        private readonly IOnlineFilter[] _filters;
     }
 }

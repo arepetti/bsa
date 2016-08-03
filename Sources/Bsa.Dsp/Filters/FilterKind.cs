@@ -27,8 +27,14 @@ namespace Bsa.Dsp.Filters
     /// Not all filter designers support all filter types, see documentation of each designer
     /// for a detailed list of supported filter types.
     /// </remarks>
-    public enum FilterType
+    public enum FilterKind
     {
+        /// <summary>
+        /// Another type of filter which is specific for a specified designer. Additional
+        /// parameters may be specified in <c>FilterDesignSettings</c> derived classes.
+        /// </summary>
+        Other,
+
         /// <summary>
         /// All-pass filter: passes all frequencies equally in gain, but changes the phase
         /// relationship among various frequencies.

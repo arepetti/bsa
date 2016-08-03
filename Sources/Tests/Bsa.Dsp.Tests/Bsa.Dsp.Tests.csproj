@@ -54,6 +54,7 @@
     <Compile Include="..\..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Filters\MedianFilterTests.cs" />
     <Compile Include="Generators\PrecomputedSamplesGeneratorTests.cs" />
     <Compile Include="Generators\SamplesGeneratorTests.cs" />
     <Compile Include="Generators\WaveGeneratorTests.cs" />

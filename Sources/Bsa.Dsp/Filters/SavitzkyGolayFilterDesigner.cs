@@ -24,7 +24,7 @@ namespace Bsa.Dsp.Filters
     // it may be worth to review proposed Gorry's implementaion described at http://pubs.acs.org/doi/abs/10.1021/ac00205a007.
     sealed class SavitzkyGolayFilterDesigner : OnlineFilterDesigner
     {
-        protected internal override IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
+        protected internal override IOnlineFilter CreateOther(FilterDesignSettings settings)
         {
             throw new NotImplementedException();
         }

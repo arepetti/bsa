@@ -31,7 +31,7 @@ namespace Bsa.Dsp.Filters
         public static class Iir
         {
             /// <summary>
-            /// Gets a Type I Chebyshev filter designer. It supports all filter types but <see cref="FilterType.AllPass"/>.
+            /// Gets a Type I Chebyshev filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>.
             /// </summary>
             /// <remarks>
             /// Filter is calculated using Fisher's method.
@@ -40,7 +40,7 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner ChebyshevI = new ChebyshevIOnlineFilterDesigner();
 
             /// <summary>
-            /// Gets a Type II Chebyshev filter designer. It supports all filter types but <see cref="FilterType.AllPass"/>.
+            /// Gets a Type II Chebyshev filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>.
             /// </summary>
             /// <remarks>
             /// Filter is calculated using Fisher's method.
@@ -49,7 +49,7 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner ChebyshevII = new ChebyshevIIOnlineFilterDesigner();
 
             /// <summary>
-            /// Gets a Butterworth filter designer. It supports all filter types but <see cref="FilterType.AllPass"/>, shelf and peak filters.
+            /// Gets a Butterworth filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>, shelf and peak filters.
             /// </summary>
             /// <remarks>
             /// Fisher's method. This filter design is extremely common in EEG signal processing (especially for band-pass filters when inside
@@ -75,7 +75,7 @@ namespace Bsa.Dsp.Filters
         {
             /// <summary>
             /// Gets the Parks/McClellan filter designer. This algorithm shapes a FIR Chebyshev filter. It supports
-            /// <see cref="FilterType.LowPass"/>, <see cref="FilterType.HighPass"/> and <see cref="FilterType.BandPass"/>.
+            /// <see cref="FilterKind.LowPass"/>, <see cref="FilterKind.HighPass"/> and <see cref="FilterKind.BandPass"/>.
             /// </summary>
             /// <remarks>
             /// Very common and widely used implementation, decent overall performance it's multi-purpose.
@@ -84,7 +84,7 @@ namespace Bsa.Dsp.Filters
         }
 
         /// <summary>
-        /// Gets the Savitzky/Golay filter designer. It supports only <see cref="FilterType.AllPass"/>.
+        /// Gets the Savitzky/Golay filter designer. It supports only <see cref="FilterKind.Other"/>.
         /// </summary>
         /// <remarks>
         /// This filter has better performance than a simple moving average (which is just a special case of this where <c>k=0</c> and <c>Y=a0</c>)
@@ -93,6 +93,14 @@ namespace Bsa.Dsp.Filters
         /// original article http://pubs.acs.org/doi/abs/10.1021/ac60214a047.
         /// </remarks>
         public static readonly OnlineFilterDesigner SavitzkyGolay = new SavitzkyGolayFilterDesigner();
+
+        /// <summary>
+        /// Gets the median filter designer. It supports only <see cref="FilterKind.Other"/>.
+        /// </summary>
+        /// <remarks>
+        /// This kind of filter is useful to de-noise signals preserving sharp edges.
+        /// </remarks>
+        public static readonly OnlineFilterDesigner Median = new MedianFilterDesigner();
 
         // TODO: bessel, biquad and elliptic? Are used enough in this field to be worth of the effort? Elliptic is often used in SMR.
         // Note we may reuse some code from bessel filters for other IIR filters...

@@ -31,6 +31,19 @@ namespace Bsa.Dsp.Filters
     public abstract class OnlineFilterDesigner
     {
         /// <summary>
+        /// Creates a designer specific filter.
+        /// </summary>
+        /// <param name="settings">Filter settings.</param>
+        /// <returns>The required filter.</returns>
+        /// <exception cref="NotSupportedException">
+        /// This designer cannot create the required filter layout.
+        /// </exception>
+        protected internal virtual IOnlineFilter CreateOther(FilterDesignSettings settings)
+        {
+            return NotSupported();
+        }
+
+        /// <summary>
         /// Creates an all-pass filter.
         /// </summary>
         /// <param name="settings">Filter settings.</param>
@@ -101,7 +114,7 @@ namespace Bsa.Dsp.Filters
             // Default implementation if there is not a better designer-specific version, if one of required
             // filters (for example one designer implements low-pass but not high-pass) isn't supported then it will
             // still throw a NotSupportedException for the missing layout.
-            return CreateCascadeFilter(
+            return new FilterCascade(
                 CreateHighPass(settings, lowFrequency),
                 CreateLowPass(settings, highFrequency));
         }
@@ -165,11 +178,6 @@ namespace Bsa.Dsp.Filters
         private static IOnlineFilter NotSupported()
         {
             throw new NotSupportedException("This filter type is not supported by this filter designer.");
-        }
-
-        private static IOnlineFilter CreateCascadeFilter(params IOnlineFilter[] filters)
-        {
-            throw new NotImplementedException();
         }
     }
 }
