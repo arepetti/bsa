@@ -41,6 +41,13 @@ namespace Bsa.Dsp.Filters
                 Debug.Assert(windowSize > 0);
 
                 _buffer = new double[windowSize];
+                IsEnabled = true;
+            }
+
+            public bool IsEnabled
+            {
+                get;
+                set;
             }
 
             public void Reset()
@@ -51,6 +58,9 @@ namespace Bsa.Dsp.Filters
             public double Process(double sample)
             {
                 Debug.Assert(_buffer != null);
+
+                if (!IsEnabled)
+                    return sample;
 
                 if (_offset == _buffer.Length)
                     AppendSample(sample);

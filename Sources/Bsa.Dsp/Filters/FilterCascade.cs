@@ -28,11 +28,21 @@ namespace Bsa.Dsp.Filters
             Debug.Assert(filters != null);
 
             _filters = filters;
+            IsEnabled = true;
+        }
+
+        public bool IsEnabled
+        {
+            get;
+            set;
         }
 
         public double Process(double sample)
         {
             Debug.Assert(_filters != null);
+
+            if (!IsEnabled)
+                return sample;
 
             foreach (var filter in _filters)
                 sample = filter.Process(sample);

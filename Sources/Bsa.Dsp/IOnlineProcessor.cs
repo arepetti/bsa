@@ -33,6 +33,21 @@ namespace Bsa.Dsp
     public interface IOnlineProcessor : IDisposable
     {
         /// <summary>
+        /// Indicates whether this processor is enabled.
+        /// </summary>
+        /// <value>
+        /// <see langword="true"/> if this processor is enabled. When disabled input samples
+        /// must flow unchanged through the processor (preserving the same delay but not any phase shift).
+        /// Default value must always be <see langword="true"/>.
+        /// Note that enabling/disabling a filter may introduce a discontinuity in its response.
+        /// </value>
+        bool IsEnabled
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Processes specified sample.
         /// </summary>
         /// <param name="sample">Sample to process.</param>

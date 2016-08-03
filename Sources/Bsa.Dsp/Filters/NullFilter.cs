@@ -41,6 +41,19 @@ namespace Bsa.Dsp
         }
 
         /// <summary>
+        /// Indicates whether this filter is enabled.
+        /// </summary>
+        /// <value>
+        /// Always <see langword="true"/> because this is a shared stateless instance filter
+        /// but its behavior is exactly the one of a disabled filter (output copies input).
+        /// </value>
+        bool IOnlineProcessor.IsEnabled
+        {
+            get { return true; }
+            set { }
+        }
+
+        /// <summary>
         /// Does nothing, this filter has no state.
         /// </summary>
         void IOnlineFilter.Reset()

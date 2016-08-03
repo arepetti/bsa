@@ -28,6 +28,7 @@ namespace Bsa.Dsp
             Debug.Assert(coefficients != null);
             Debug.Assert((coefficients.Length & 1) == 0);
 
+            IsEnabled = true;
             _a = new double[coefficients.Length];
             _aBuffer = new double[coefficients.Length];
             _b = new double[coefficients.Length];
@@ -42,8 +43,17 @@ namespace Bsa.Dsp
             }
         }
 
+        public bool IsEnabled
+        {
+            get;
+            set;
+        }
+
         public double Process(double sample)
         {
+            if (!IsEnabled)
+                return sample;
+
             Debug.Assert(_bBuffer != null && _b != null);
             Debug.Assert(_aBuffer != null && _a != null);
             Debug.Assert(_offset >= 0 && _offset < _halfSize);
