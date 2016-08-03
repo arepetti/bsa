@@ -101,9 +101,5 @@ namespace Bsa.Dsp.Filters
         /// This kind of filter is useful to de-noise signals preserving sharp edges.
         /// </remarks>
         public static readonly OnlineFilterDesigner Median = new MedianFilterDesigner();
-
-        // TODO: bessel, biquad and elliptic? Are used enough in this field to be worth of the effort? Elliptic is often used in SMR.
-        // Note we may reuse some code from bessel filters for other IIR filters...
-        // Butterworth with Exstrom's method?
     }
 }
