@@ -60,6 +60,7 @@
     <Compile Include="Generators\WaveGeneratorTests.cs" />
     <Compile Include="Generators\WhiteGaussianNoiseGeneratorTests.cs" />
     <Compile Include="OnlineFilterExtensionsTests.cs" />
+    <Compile Include="Processors\ProcessorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

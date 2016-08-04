@@ -77,7 +77,13 @@
     <Compile Include="IGenerator.cs" />
     <Compile Include="IOnlineFilter.cs" />
     <Compile Include="IOnlineProcessor.cs" />
-    <Compile Include="OnlineFilterExtensions.cs" />
+    <Compile Include="OnlineProcessorExtensions.cs" />
+    <Compile Include="Processors\Inverter.cs" />
+    <Compile Include="Processors\LinearTransformation.cs" />
+    <Compile Include="Processors\OnlineProcessor.cs" />
+    <Compile Include="Processors\Rectifier.cs" />
+    <Compile Include="Processors\Threshold.cs" />
+    <Compile Include="Processors\ThresholdType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -91,9 +97,7 @@
       <Name>Bsa.Types</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Processors\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

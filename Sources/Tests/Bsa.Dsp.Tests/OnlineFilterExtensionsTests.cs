@@ -101,6 +101,12 @@ namespace Bsa.Dsp.Tests
                 return 0;
             }
 
+            public bool IsEnabled
+            {
+                get;
+                set;
+            }
+
             public void Reset()
             {
             }
