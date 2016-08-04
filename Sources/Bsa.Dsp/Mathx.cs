@@ -17,10 +17,25 @@
 //
 
 using System;
+using System.Numerics;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp
 {
-    sealed class RbjFilterDesigner : OnlineFilterDesigner
+    static class Mathx
     {
+        public static Complex Expj(double x)
+        {
+            return new Complex(Math.Cos(x), Math.Sin(x)); 
+        }
+
+        public static double Asinh(double x)
+        {
+            return Math.Log(x + Math.Sqrt(1 + x * x));
+        }
+
+        public static double Clip(double minimum, double maximum, double value)
+        {
+            return Math.Max(minimum, Math.Min(maximum, value));
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace Bsa.Dsp.Filters
             /// Filter is calculated using Fisher's method.
             /// It's widely used (in EEG, for example, is common when cutoff is far away from frequency range of interest).
             /// </remarks>
-            public static readonly OnlineFilterDesigner ChebyshevI = new ChebyshevIOnlineFilterDesigner();
+            public static readonly OnlineFilterDesigner ChebyshevI = new Bsa.Dsp.Filters.Iir.ChebyshevIOnlineFilterDesigner();
 
             /// <summary>
             /// Gets a Type II Chebyshev filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>.
@@ -46,7 +46,7 @@ namespace Bsa.Dsp.Filters
             /// Filter is calculated using Fisher's method.
             /// It's widely used (in EEG, for example, is common when cutoff is far away from frequency range of interest).
             /// </remarks>
-            public static readonly OnlineFilterDesigner ChebyshevII = new ChebyshevIIOnlineFilterDesigner();
+            public static readonly OnlineFilterDesigner ChebyshevII = new Bsa.Dsp.Filters.Iir.ChebyshevIIOnlineFilterDesigner();
 
             /// <summary>
             /// Gets a Butterworth filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>, shelf and peak filters.
@@ -55,7 +55,7 @@ namespace Bsa.Dsp.Filters
             /// Fisher's method. This filter design is extremely common in EEG signal processing (especially for band-pass filters when inside
             /// frequency range of interest).
             /// </remarks>
-            public static readonly OnlineFilterDesigner Butterworth = new ButterworthOnlineFilterDesigner();
+            public static readonly OnlineFilterDesigner Butterworth = new Bsa.Dsp.Filters.Iir.ButterworthOnlineFilterDesigner();
 
             /// <summary>
             /// Gets a RBJ filter designer. It supports all filter types.
@@ -65,7 +65,7 @@ namespace Bsa.Dsp.Filters
             /// for some type of data, when used to build a big cascade of filters (for example notches).
             /// Detailed description at http://www.musicdsp.org/files/Audio-EQ-Cookbook.txt.
             /// </remarks>
-            public static readonly OnlineFilterDesigner Rbj = new RbjFilterDesigner();
+            public static readonly OnlineFilterDesigner Rbj = new Bsa.Dsp.Filters.Iir.RbjFilterDesigner();
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Bsa.Dsp.Filters
             /// <remarks>
             /// Very common and widely used implementation, decent overall performance it's multi-purpose.
             /// </remarks>
-            public static readonly OnlineFilterDesigner ParksMcClellan = new ParksMcClellanOnlineFilterDesigner();
+            public static readonly OnlineFilterDesigner ParksMcClellan = new Bsa.Dsp.Filters.Fir.ParksMcClellanOnlineFilterDesigner();
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Bsa.Dsp.Filters
         /// and Savitzky-Golay Filters</em> by Dr. Monisha Chakrabortya and Shreya Das). Implementation based on
         /// original article http://pubs.acs.org/doi/abs/10.1021/ac60214a047.
         /// </remarks>
-        public static readonly OnlineFilterDesigner SavitzkyGolay = new SavitzkyGolayFilterDesigner();
+        public static readonly OnlineFilterDesigner SavitzkyGolay = new Bsa.Dsp.Filters.Others.SavitzkyGolayFilterDesigner();
 
         /// <summary>
         /// Gets the median filter designer. It supports only <see cref="FilterKind.Other"/>.
@@ -100,6 +100,6 @@ namespace Bsa.Dsp.Filters
         /// <remarks>
         /// This kind of filter is useful to de-noise signals preserving sharp edges.
         /// </remarks>
-        public static readonly OnlineFilterDesigner Median = new MedianFilterDesigner();
+        public static readonly OnlineFilterDesigner Median = new Bsa.Dsp.Filters.Others.MedianFilterDesigner();
     }
 }

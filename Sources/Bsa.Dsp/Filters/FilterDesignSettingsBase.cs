@@ -50,6 +50,21 @@ namespace Bsa.Dsp.Filters
             }
         }
 
+        internal TResult GetOrDefault<TDerivedClass, TResult>(Func<TDerivedClass, TResult> selector, TResult defaultValue)
+            where TDerivedClass : FilterDesignSettingsBase
+        {
+            var derivedClass = this as TDerivedClass;
+            if (derivedClass != null)
+                return selector(derivedClass);
+
+            return defaultValue;
+        }
+
+        internal double NormalizeFrequency(double frequency)
+        {
+            return Mathx.Clip(0, 0.5, SamplingRate / frequency);
+        }
+
         private double _samplingRate;
     }
 }

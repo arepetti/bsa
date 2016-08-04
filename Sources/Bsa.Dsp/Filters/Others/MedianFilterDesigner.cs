@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp.Filters.Others
 {
     sealed class MedianFilterDesigner : OnlineFilterDesigner
     {

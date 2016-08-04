@@ -18,7 +18,7 @@
 
 using System;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp.Filters.Fir
 {
     sealed class ParksMcClellanOnlineFilterDesigner : OnlineFilterDesigner
     {

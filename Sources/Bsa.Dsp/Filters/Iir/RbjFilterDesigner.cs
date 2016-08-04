@@ -18,9 +18,9 @@
 
 using System;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp.Filters.Iir
 {
-    sealed class ChebyshevIOnlineFilterDesigner : OnlineFilterDesigner
+    sealed class RbjFilterDesigner : OnlineFilterDesigner
     {
     }
 }

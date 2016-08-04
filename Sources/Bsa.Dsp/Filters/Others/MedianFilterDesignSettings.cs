@@ -13,43 +13,45 @@
 // GNU Lesser General Public License for more details.
 //
 // You should have received a copy of the GNU Lesser General Public License
-// along with BSA-F.  If not, see <http://www.gnu.org/licenses/>.
+// along with BSA-F. If not, see <http://www.gnu.org/licenses/>.
 //
 
 using System;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp.Filters.Others
 {
     /// <summary>
-    /// Contains settings to design a Chebyshev filter.
+    /// Contains settings specific for <see cref="OnlineFilterDesign.Median"/>.
     /// </summary>
-    public sealed class ChebyshevFilterDesignSettings : FilterDesignSettings
+    public sealed class MedianFilterDesignSettings : FilterDesignSettings
     {
         /// <summary>
-        /// Gets/sets the maximum ripple (in dB) for this filter.
+        /// Gets/sets the window size of the median filter.
         /// </summary>
         /// <value>
-        /// The maximum ripple (in dB) for this filter or <see langword="null"/> if this value is unspecified
-        /// and default/optimal should be used.
+        /// The window size of the median filter, default value is 2.
         /// </value>
         /// <exception cref="ArgumentOutOfRangeException">
-        /// If value is less than zero or <see cref="Double.NaN"/> or <see cref="Double.PositiveInfinity"/>.
+        /// If value is less or equal than zero.
         /// </exception>
-        public double? MaximumRipple
+        public int WindowSize
         {
-            get { return _maximumRipple; }
+            get { return _windowSize; }
             set
             {
-                if (value.HasValue)
-                {
-                    if (value.Value < 0 || Double.IsNaN(value.Value) || Double.IsPositiveInfinity(value.Value))
-                        throw new ArgumentOutOfRangeException();
-                }
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException();
 
-                _maximumRipple = value;
+                _windowSize = value;
             }
         }
 
-        private double? _maximumRipple;
+        /// <devdoc>
+        /// Default value for DefaultWindowSize property, it's used by filter designer
+        /// when invoked with base class FilterDesignSettings as argument.
+        /// </devdoc>
+        internal const int DefaultWindowSize = 2;
+
+        private int _windowSize = DefaultWindowSize;
     }
 }

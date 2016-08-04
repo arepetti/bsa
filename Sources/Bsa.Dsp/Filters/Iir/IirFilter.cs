@@ -19,7 +19,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Bsa.Dsp
+namespace Bsa.Dsp.Iir
 {
     sealed class IirFilter : Disposable, IOnlineFilter
     {
@@ -29,10 +29,11 @@ namespace Bsa.Dsp
             Debug.Assert((coefficients.Length & 1) == 0);
 
             IsEnabled = true;
-            _a = new double[coefficients.Length];
-            _aBuffer = new double[coefficients.Length];
+
             _b = new double[coefficients.Length];
+            _a = new double[coefficients.Length];
             _bBuffer = new double[coefficients.Length];
+            _aBuffer = new double[coefficients.Length];
             
             _halfSize = coefficients.Length / 2;
 

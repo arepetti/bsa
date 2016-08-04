@@ -17,10 +17,32 @@
 //
 
 using System;
+using System.Numerics;
 
-namespace Bsa.Dsp.Filters
+namespace Bsa.Dsp.Filters.Iir
 {
-    sealed class ButterworthOnlineFilterDesigner : OnlineFilterDesigner
+    sealed class PolesAndZeros
     {
+        public PolesAndZeros()
+        {
+        }
+
+        public PolesAndZeros(int numberOfPoles, int numberOfZeros)
+        {
+            Poles = new Complex[numberOfPoles];
+            Zeros = new Complex[numberOfZeros];
+        }
+
+        public Complex[] Poles
+        {
+            get;
+            set;
+        }
+
+        public Complex[] Zeros
+        {
+            get;
+            set;
+        }
     }
 }
