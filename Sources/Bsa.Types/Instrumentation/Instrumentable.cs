@@ -28,12 +28,10 @@ namespace Bsa.Instrumentation
         /// <summary>
         /// Initializes a new instance of <see cref="Instrumentable"/>.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "NullTelemetrySession", Justification = "It is a class name.")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors", Justification = "This is the intended behavior.")]
         protected Instrumentable()
         {
-            // TODO: we may introduce a call to a virtual method (then overrideable in derived classes) to disable instrumentation (current workaround is wrapping
-            // returned object into a NullTelemetrySession object).
+            // TODO: this is not a good practice, maybe it's better to introduce an IsEnabled property and lazy initialization of _telemetry
             _telemetry = CreateSession();
             if (_telemetry == null)
                 throw new InvalidOperationException("An instrumentable object must have a valid telemetry session, use NullTelemetrySession if you do not need it.");

@@ -47,7 +47,7 @@ namespace Bsa
     /// }
     /// </code>
     /// </remarks>
-    public sealed class SyncRoot : IDisposable
+    public sealed class SyncRoot : Disposable
     {
         /// <summary>
         /// Creates a new instance of <see cref="ReaderWriterLockSlim"/>
@@ -56,14 +56,6 @@ namespace Bsa
         public SyncRoot(LockRecursionPolicy lockRecursionPolicy = LockRecursionPolicy.NoRecursion)
         {
             _lock = new ReaderWriterLockSlim(lockRecursionPolicy);
-        }
-
-        /// <summary>
-        /// Release resources acquired by this object.
-        /// </summary>
-        ~SyncRoot()
-        {
-            Dispose(false);
         }
 
         /// <summary>
@@ -81,7 +73,7 @@ namespace Bsa
         public IDisposable EnterReadLock()
         {
             _lock.EnterReadLock();
-            return new Disposable(() => _lock.ExitReadLock());
+            return new ActionOnDispose(() => _lock.ExitReadLock());
         }
 
         /// <summary>
@@ -99,7 +91,7 @@ namespace Bsa
         public IDisposable EnterUpgradeableReadLock()
         {
             _lock.EnterUpgradeableReadLock();
-            return new Disposable(() => _lock.ExitUpgradeableReadLock());
+            return new ActionOnDispose(() => _lock.ExitUpgradeableReadLock());
         }
 
         /// <summary>
@@ -117,21 +109,25 @@ namespace Bsa
         public IDisposable EnterWriteLock()
         {
             _lock.EnterWriteLock();
-            return new Disposable(() => _lock.ExitWriteLock());
+            return new ActionOnDispose(() => _lock.ExitWriteLock());
         }
 
-        /// <summary>
-        /// Releases resources acquired by this object.
-        /// </summary>
-        public void Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            try
+            {
+                if (disposing && _lock != null)
+                    _lock.Dispose();
+            }
+            finally
+            {
+ 	            base.Dispose(disposing);
+            }
         }
 
-        private sealed class Disposable : IDisposable
+        private sealed class ActionOnDispose : IDisposable
         {
-            public Disposable(Action onDisposing)
+            public ActionOnDispose(Action onDisposing)
             {
                 _onDisposing = onDisposing;
             }
@@ -145,11 +141,5 @@ namespace Bsa
         }
 
         private readonly ReaderWriterLockSlim _lock;
-
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-                _lock.Dispose();
-        }
     }
 }
