@@ -21,7 +21,7 @@ using System.Diagnostics;
 
 namespace Bsa.Dsp.Filters
 {
-    sealed class FilterCascade : IOnlineFilter
+    sealed class FilterCascade : Disposable, IOnlineFilter
     {
         public FilterCascade(params IOnlineFilter[] filters)
         {
@@ -58,14 +58,21 @@ namespace Bsa.Dsp.Filters
                 filter.Reset();
         }
 
-        void IDisposable.Dispose()
+        protected override void Dispose(bool disposing)
         {
-            Debug.Assert(_filters != null);
-
-            foreach (var filter in _filters)
-                filter.Dispose();
-
-            GC.SuppressFinalize(this);
+            try
+            {
+                if (disposing)
+                {
+                    Debug.Assert(_filters != null);
+                    foreach (var filter in _filters)
+                        filter.Dispose();
+                }
+            }
+            finally
+            {
+                base.Dispose(disposing);
+            }
         }
 
         private readonly IOnlineFilter[] _filters;

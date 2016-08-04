@@ -65,7 +65,6 @@ namespace Bsa.Dsp
         /// </summary>
         void IDisposable.Dispose()
         {
-            GC.SuppressFinalize(this);
         }
     }
 }

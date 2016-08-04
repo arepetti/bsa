@@ -21,7 +21,7 @@ using System.Diagnostics;
 
 namespace Bsa.Dsp
 {
-    sealed class IirFilter : IOnlineFilter
+    sealed class IirFilter : Disposable, IOnlineFilter
     {
         public IirFilter(double[] coefficients)
         {
@@ -83,11 +83,6 @@ namespace Bsa.Dsp
             Array.Clear(_aBuffer, 0, _aBuffer.Length);
         }
        
-        void IDisposable.Dispose()
-        {
-            GC.SuppressFinalize(this);
-        }
-
         private readonly double[] _a, _b;
         private readonly double[] _aBuffer, _bBuffer;
         private readonly int _halfSize;
