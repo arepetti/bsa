@@ -23,7 +23,7 @@ namespace Bsa.Dsp
     /// <summary>
     /// Extension methods for <see cref="IOnlineFilter"/> objects.
     /// </summary>
-    public static class OnlineFilterExtensions
+    public static class OnlineProcessorExtensions
     {
         /// <summary>
         /// Processes all specified samples and returns a new array

@@ -61,6 +61,10 @@ namespace Bsa.Dsp
         /// <summary>
         /// Reset processor's state (when applicable).
         /// </summary>
+        /// <remarks>
+        /// Calling this method won't revert any property to its default value,
+        /// for example <see cref="IsEnabled"/> won't be changed back to <see langword="true"/>.
+        /// </remarks>
         void Reset();
     }
 }
