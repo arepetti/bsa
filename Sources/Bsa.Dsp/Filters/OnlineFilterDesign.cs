@@ -58,6 +58,15 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner Butterworth = new Bsa.Dsp.Filters.Iir.ButterworthOnlineFilterDesigner();
 
             /// <summary>
+            /// Gets a Bessel filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>, shelf and peak filters.
+            /// </summary>
+            /// <remarks>
+            /// Fisher's method. This filter design is extremely common in signal processing for medical applications, especially
+            /// for the low-pass fitler when cutoff frequency is relatively low. It's also widely used in image processing.
+            /// </remarks>
+            public static readonly OnlineFilterDesigner Bessel = new Bsa.Dsp.Filters.Iir.BesselOnlineFilterDesigner();
+
+            /// <summary>
             /// Gets a RBJ filter designer. It supports all filter types.
             /// </summary>
             /// <remarks>

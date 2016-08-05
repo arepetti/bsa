@@ -45,7 +45,7 @@ namespace Bsa.Dsp.Filters.Iir
     /// When an array <c>a[]</c> contains the coefficients, the polynomial has the following form:
     /// <c>a[0] * x^n + a[1] * x^(n-1) + ... a[n-1] * x + a[n]</c>.
     /// </devdoc>
-    static class Polynomials
+    static partial class Polynomials
     {
         /// <devdoc>
         /// Structure for the coefficients of a rational fraction (a fraction of two polynomials) with real coefficients.

@@ -1,4 +1,13 @@
 ﻿//
+// Original algorithm and code from T. Fisher (http://www-users.cs.york.ac.uk/~fisher/),
+// see also Fisher: "Digital signal processing of Decca Navigator radionavigation signals" (1999).
+//
+//
+// This C# code is an adaption of Java port from original C code by Christian d'Heureuse (2013).
+// Java version is multi-licensed under EPL 1.0 (or later) and L-GPL 2.1 (or later).
+// More details at http://svn.source-code.biz/dsp-java/trunk/src/main/java/biz/source_code/dsp/filter/IirFilterDesignFisher.java
+//
+//
 // This file is part of Biological Signals Acquisition Framework (BSA-F).
 // Copyright © Adriano Repetti 2016.
 //
@@ -17,10 +26,21 @@
 //
 
 using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Numerics;
 
 namespace Bsa.Dsp.Filters.Iir
 {
-    sealed class ButterworthOnlineFilterDesigner : OnlineFilterDesigner
+    sealed class ButterworthOnlineFilterDesigner : FisherMethodFilterDesigner
     {
+        protected override Complex[] GetPoles(int filterOrder, double ripple)
+        {
+            Debug.Assert(ripple == 0);
+
+            return Enumerable.Range(0, filterOrder)
+                .Select(i => Mathx.Expj((filterOrder / 2.0 + 0.5 + i) * Math.PI / filterOrder))
+                .ToArray();
+        }
     }
 }

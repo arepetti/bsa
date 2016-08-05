@@ -1,4 +1,13 @@
 ﻿//
+// Original algorithm and code from T. Fisher (http://www-users.cs.york.ac.uk/~fisher/),
+// see also Fisher: "Digital signal processing of Decca Navigator radionavigation signals" (1999).
+//
+//
+// This C# code is an adaption of Java port from original C code by Christian d'Heureuse (2013).
+// Java version is multi-licensed under EPL 1.0 (or later) and L-GPL 2.1 (or later).
+// More details at http://svn.source-code.biz/dsp-java/trunk/src/main/java/biz/source_code/dsp/filter/IirFilterDesignFisher.java
+//
+//
 // This file is part of Biological Signals Acquisition Framework (BSA-F).
 // Copyright © Adriano Repetti 2016.
 //
@@ -24,46 +33,6 @@ namespace Bsa.Dsp.Filters.Iir
 {
     sealed class ChebyshevIOnlineFilterDesigner : FisherMethodFilterDesigner
     {
-        protected internal override IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
-        {
-            return Create(Design(FilterKind.LowPass, settings.Order,
-                CalculateRipple(settings),
-                settings.NormalizeFrequency(frequency)));
-        }
-
-        protected internal override IOnlineFilter CreateHighPass(FilterDesignSettings settings, double frequency)
-        {
-            return Create(Design(FilterKind.HighPass, settings.Order,
-                CalculateRipple(settings),
-                settings.NormalizeFrequency(frequency)));
-        }
-
-        protected internal override IOnlineFilter CreateNotch(FilterDesignSettings settings, double frequency)
-        {
-            const double notchHalfWidth = 0.5; // Hz
-
-            return Create(Design(FilterKind.BandStop, settings.Order,
-                CalculateRipple(settings),
-                settings.NormalizeFrequency(frequency - notchHalfWidth),
-                settings.NormalizeFrequency(frequency + notchHalfWidth)));
-        }
-
-        protected internal override IOnlineFilter CreateBandPass(FilterDesignSettings settings, double lowFrequency, double highFrequency)
-        {
-            return Create(Design(FilterKind.BandPass, settings.Order,
-                CalculateRipple(settings),
-                settings.NormalizeFrequency(lowFrequency),
-                settings.NormalizeFrequency(highFrequency)));
-        }
-
-        protected internal override IOnlineFilter CreateBandStop(FilterDesignSettings settings, double lowFrequency, double highFrequency)
-        {
-            return Create(Design(FilterKind.BandStop, settings.Order,
-                CalculateRipple(settings),
-                settings.NormalizeFrequency(lowFrequency),
-                settings.NormalizeFrequency(highFrequency)));
-        }
-
         protected override Complex[] GetPoles(int filterOrder, double ripple)
         {
             var poles = Enumerable.Range(0, filterOrder)
@@ -81,7 +50,7 @@ namespace Bsa.Dsp.Filters.Iir
             return poles;
         }
 
-        private static double CalculateRipple(FilterDesignSettings settings)
+        protected override double CalculateRipple(FilterDesignSettings settings)
         {
             return settings.GetOrDefault<ChebyshevFilterDesignSettings, double>(x => x.MaximumRipple ?? 0, 0);
         }

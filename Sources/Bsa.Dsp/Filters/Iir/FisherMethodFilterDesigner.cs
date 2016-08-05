@@ -35,13 +35,69 @@ namespace Bsa.Dsp.Filters.Iir
 {
     abstract class FisherMethodFilterDesigner : OnlineFilterDesigner
     {
+        protected internal override IOnlineFilter CreateLowPass(FilterDesignSettings settings, double frequency)
+        {
+            return Create(Design(FilterKind.LowPass, settings.Order,
+                CalculateRipple(settings),
+                settings.NormalizeFrequency(frequency)));
+        }
+
+        protected internal override IOnlineFilter CreateHighPass(FilterDesignSettings settings, double frequency)
+        {
+            return Create(Design(FilterKind.HighPass, settings.Order,
+                CalculateRipple(settings),
+                settings.NormalizeFrequency(frequency)));
+        }
+
+        protected internal override IOnlineFilter CreateNotch(FilterDesignSettings settings, double frequency)
+        {
+            const double notchHalfWidth = 0.5; // Hz
+
+            return Create(Design(FilterKind.BandStop, settings.Order,
+                CalculateRipple(settings),
+                settings.NormalizeFrequency(frequency - notchHalfWidth),
+                settings.NormalizeFrequency(frequency + notchHalfWidth)));
+        }
+
+        protected internal override IOnlineFilter CreateBandPass(FilterDesignSettings settings, double lowFrequency, double highFrequency)
+        {
+            return Create(Design(FilterKind.BandPass, settings.Order,
+                CalculateRipple(settings),
+                settings.NormalizeFrequency(lowFrequency),
+                settings.NormalizeFrequency(highFrequency)));
+        }
+
+        protected internal override IOnlineFilter CreateBandStop(FilterDesignSettings settings, double lowFrequency, double highFrequency)
+        {
+            return Create(Design(FilterKind.BandStop, settings.Order,
+                CalculateRipple(settings),
+                settings.NormalizeFrequency(lowFrequency),
+                settings.NormalizeFrequency(highFrequency)));
+        }
+        
+        /// <devdoc>
+        /// http://en.wikipedia.org/wiki/Prototype_filter.
+        /// </devdoc>
+        protected abstract Complex[] GetPoles(int filterOrder, double ripple);
+
+        protected virtual double CalculateRipple(FilterDesignSettings settings)
+        {
+            // Default to 0 because most filters don't use Ripple
+            return 0;
+        }
+
+        protected virtual SToZMappingMethod GetSToZMappingMethod()
+        {
+            return SToZMappingMethod.BilinearTransform; // MatchedZTransform is for Bessel filters
+        }
+
         /// <devdoc>
         /// Designs an IIR filter and returns the IIR filter coefficients. Cutoff frequencies
         /// are relative to sampling rate and must be between 0 and 0.5.
         /// Passband ripple is in dB. Must be negative. Only used for Chebyshev filter, ignored for other filters.
         /// Both low-pass and high-pass use fcf1, band-pass and band-stop need both.
         /// </devdoc>
-        public IirFilterCoefficients Design(FilterKind type, int filterOrder, double ripple, double fcf1, double fcf2 = 0)
+        private IirFilterCoefficients Design(FilterKind type, int filterOrder, double ripple, double fcf1, double fcf2 = 0)
         {
             var poles = GetPoles(filterOrder, ripple);
 
@@ -53,30 +109,7 @@ namespace Bsa.Dsp.Filters.Iir
             return ComputeIirFilterCoefficients(tf, ComputeGain(tf, type, fcf1, fcf2));
         }
 
-        protected enum SToZMappingMethod
-        {
-            /// <devdoc>
-            /// http://en.wikipedia.org/wiki/Bilinear_transform.
-            /// </devdoc>
-            BilinearTransform,
-
-            /// <devdoc>
-            /// http://en.wikipedia.org/wiki/Matched_Z-transform_method.
-            /// </devdoc>
-            MatchedZTransform
-        }
-
-        /// <devdoc>
-        /// http://en.wikipedia.org/wiki/Prototype_filter.
-        /// </devdoc>
-        protected abstract Complex[] GetPoles(int filterOrder, double ripple);
-
-        protected virtual SToZMappingMethod GetSToZMappingMethod()
-        {
-            return SToZMappingMethod.BilinearTransform; // MatchedZTransform is for Bessel filters
-        }
-
-        protected IOnlineFilter Create(IirFilterCoefficients coefficients)
+        private static IOnlineFilter Create(IirFilterCoefficients coefficients)
         {
             throw new NotImplementedException();
         }
