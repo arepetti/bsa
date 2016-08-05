@@ -111,7 +111,7 @@ namespace Bsa.Dsp.Filters.Iir
 
         private static IOnlineFilter Create(IirFilterCoefficients coefficients)
         {
-            throw new NotImplementedException();
+            return new IirFilter(coefficients);
         }
 
         /// <summary>

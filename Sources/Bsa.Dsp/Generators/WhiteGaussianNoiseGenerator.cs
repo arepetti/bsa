@@ -34,8 +34,7 @@ namespace Bsa.Dsp.Generators
         /// </summary>
         /// <param name="random">
         /// Generator from which obtain random samples used to build a white noise stream. If you do not have any
-        /// special distribution requirement you may simply use <see cref="RandomNumbersGenerator"/> and its default
-        /// parameterless constructor.
+        /// special distribution requirement you may simply use generator returned by <see cref="CreateDefaultRandomGenerator"/>.
         /// </param>
         /// <exception cref="ArgumentNullException">
         /// If <paramref name="random"/> is <see langword="null"/>.
@@ -63,6 +62,18 @@ namespace Bsa.Dsp.Generators
         public WhiteGaussianNoiseGenerator(Func<double> random)
             : this(new DelegatedGenerator(random))
         {
+        }
+
+        /// <summary>
+        /// Creates a new instance of a random numbers generator
+        /// to be used with <see cref="WhiteGaussianNoiseGenerator"/> as signal source.
+        /// </summary>
+        /// <returns>
+        /// A new instance of a random number generator.
+        /// </returns>
+        public static IGenerator<double> CreateDefaultRandomGenerator()
+        {
+            return new RandomNumbersGenerator();
         }
 
         /// <summary>

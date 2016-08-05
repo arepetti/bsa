@@ -136,7 +136,7 @@ namespace Bsa.Dsp.Processors
                 case ThresholdType.GreaterThan:
                     return Math.Max(LowerBoundary, sample);
                 case ThresholdType.InRange:
-                    return Math.Max(LowerBoundary, Math.Min(UpperBoundary, sample));
+                    return Mathx.Clip(LowerBoundary, UpperBoundary, sample);
                 case ThresholdType.OutOfRange:
                     if (sample > LowerBoundary && sample < LowerBoundary + (UpperBoundary - LowerBoundary) / 2)
                         return LowerBoundary;

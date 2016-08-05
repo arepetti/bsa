@@ -19,29 +19,23 @@
 using System;
 using System.Diagnostics;
 
-namespace Bsa.Dsp.Iir
+namespace Bsa.Dsp.Filters.Iir
 {
     sealed class IirFilter : Disposable, IOnlineFilter
     {
-        public IirFilter(double[] coefficients)
+        public IirFilter(IirFilterCoefficients coefficients)
         {
             Debug.Assert(coefficients != null);
-            Debug.Assert((coefficients.Length & 1) == 0);
+            Debug.Assert(coefficients.A.Length > 0 && coefficients.B.Length > 0 && coefficients.A[0] == 1.0);
 
             IsEnabled = true;
 
-            _b = new double[coefficients.Length];
-            _a = new double[coefficients.Length];
-            _bBuffer = new double[coefficients.Length];
-            _aBuffer = new double[coefficients.Length];
-            
-            _halfSize = coefficients.Length / 2;
-
-            for (int i = 0; i < _halfSize; ++i)
-            {
-                _b[i] = _b[_halfSize + i] = coefficients[i];
-                _a[i] = _a[_halfSize + i] = coefficients[_halfSize + i];
-            }
+           _a = coefficients.A;
+           _b = coefficients.B;
+           _nb = _b.Length - 1;
+           _na = _a.Length - 1;
+           _buf1 = new double[_nb];
+           _buf2 = new double[_na];
         }
 
         public bool IsEnabled
@@ -52,41 +46,50 @@ namespace Bsa.Dsp.Iir
 
         public double Process(double sample)
         {
+            Debug.Assert(_a != null && _b != null);
+            Debug.Assert(_buf1 != null && _buf2 != null);
+            Debug.Assert(_buf1.Length == _nb && _buf2.Length == _na);
+
             if (!IsEnabled)
                 return sample;
 
-            Debug.Assert(_bBuffer != null && _b != null);
-            Debug.Assert(_aBuffer != null && _a != null);
-            Debug.Assert(_offset >= 0 && _offset < _halfSize);
-
-            _offset = _offset > 0 ? _offset - 1 : _halfSize - 1;
-
-            _bBuffer[_offset] = sample;
-            _aBuffer[_offset] = 0;
-
-            double output = 0;
-
-            for (int i = 0, j = _halfSize - _offset; i < _halfSize; ++i, ++j)
-                output += _bBuffer[i] * _b[j];
-
-            for (int i = 0, j = _halfSize - _offset; i < _halfSize; ++i, ++j)
-                output -= _aBuffer[i] * _a[j];
-
-            return _aBuffer[_offset] = output;
+            double acc = _b[0] * sample;
+            for (int j = 1; j <= _nb; j++)
+            {
+                int p = (_pos1 + _nb - j) % _nb;
+                acc += _b[j] * _buf1[p];
+            }
+            for (int j = 1; j <= _na; j++)
+            {
+                int p = (_pos2 + _na - j) % _na;
+                acc -= _a[j] * _buf2[p];
+            }
+            if (_nb > 0)
+            {
+                _buf1[_pos1] = sample;
+                _pos1 = (_pos1 + 1) % _nb;
+            }
+            if (_na > 0)
+            {
+                _buf2[_pos2] = acc;
+                _pos2 = (_pos2 + 1) % _na;
+            }
+            return acc;
         }
 
         public void Reset()
         {
-            Debug.Assert(_bBuffer != null);
-            Debug.Assert(_aBuffer != null);
+            Debug.Assert(_buf1 != null);
+            Debug.Assert(_buf2 != null);
 
-            Array.Clear(_bBuffer, 0, _bBuffer.Length);
-            Array.Clear(_aBuffer, 0, _aBuffer.Length);
-        }
-       
+            Array.Clear(_buf1, 0, _buf1.Length);
+            Array.Clear(_buf2, 0, _buf2.Length);
+        }       
+
+        private readonly int _nb, _na;
         private readonly double[] _a, _b;
-        private readonly double[] _aBuffer, _bBuffer;
-        private readonly int _halfSize;
-        private int _offset;
-    }
+
+        private readonly double[] _buf1, _buf2;
+        private int _pos1, _pos2;
+   }
 }

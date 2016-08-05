@@ -62,7 +62,7 @@ namespace Bsa.Dsp.Filters
 
         internal double NormalizeFrequency(double frequency)
         {
-            return Mathx.Clip(0, 0.5, SamplingRate / frequency);
+            return Mathx.Clip(0, 0.5, frequency / SamplingRate);
         }
 
         private double _samplingRate;

@@ -21,6 +21,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Bsa.Dsp.Filters;
+using Bsa.Dsp.Filters.Others;
 
 namespace Bsa.Dsp.Tests.Filters
 {
