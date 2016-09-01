@@ -91,7 +91,7 @@ namespace Bsa.Dsp.Generators
             Debug.Assert(_generator != null || _randomizer != null);
 
             if (_generator == null)
-                return _randomizer.Next();
+                return _randomizer.NextDouble();
 
             return _generator();
         }

@@ -27,6 +27,16 @@ namespace Bsa.Dsp.Tests.Generators
     public sealed class WhiteGaussianNoiseGeneratorTests
     {
         [TestMethod]
+        public void ResultsAreReal()
+        {
+            Random rnd = new Random();
+            var generator = new WhiteGaussianNoiseGenerator(() => rnd.NextDouble());
+            generator.Range = new Range<double>(-1, 1);
+
+            Assert.IsFalse(generator.Next(1000).Any(x => Double.IsNaN(x) || Double.IsInfinity(x)));
+        }
+
+        [TestMethod]
         public void MeanSignalPowerIsOne()
         {
             // We're working with random numbers then our test is little bit aleatory,
