@@ -52,7 +52,7 @@ namespace Bsa.Dsp.Filters.Iir
 
         protected override double CalculateRipple(FilterDesignSettings settings)
         {
-            return settings.GetOrDefault<ChebyshevFilterDesignSettings, double>(x => x.MaximumRipple ?? 0, 0);
+            return settings.GetOrDefault<ChebyshevFilterDesignSettings, double>(x => x.MaximumRipple ?? -10, -10);
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Bsa.Dsp.Filters.Iir
         /// </summary>
         /// <value>
         /// The maximum ripple (in dB) for this filter or <see langword="null"/> if this value is unspecified
-        /// and default/optimal should be used.
+        /// and default (-10 dB) should be used.
         /// </value>
         /// <exception cref="ArgumentOutOfRangeException">
         /// If value is greater than zero or <see cref="Double.NaN"/> or <see cref="Double.PositiveInfinity"/>.
