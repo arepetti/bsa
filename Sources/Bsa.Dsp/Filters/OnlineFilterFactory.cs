@@ -52,6 +52,9 @@ namespace Bsa.Dsp.Filters
         /// <exception cref="NotSupportedException">
         /// If specified <paramref name="design"/> does not support required filter <paramref name="type"/>.
         /// </exception>
+        /// <exception cref="ArithmeticException">
+        /// If filter cannot be designed as required (but parameters are all OK).
+        /// </exception>
         public static IOnlineFilter Create(FilterKind type, OnlineFilterDesigner design, FilterDesignSettings settings)
         {
             ValidateSettingsWithDesigner(design, settings);
@@ -60,7 +63,7 @@ namespace Bsa.Dsp.Filters
                 return design.CreateOther(settings);
 
             if (type == FilterKind.AllPass)
-                return design.CreateAllPass(settings);
+                return design.CreateAllPass(settings, 0.0, settings.SamplingRate / 2);
 
             throw new ArgumentException("This overload can be used only to create all pass/other filters.", "type");
         }
@@ -83,6 +86,9 @@ namespace Bsa.Dsp.Filters
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If specified <paramref name="design"/> does not support required filter <see cref="FilterKind.Other"/>.
+        /// </exception>
+        /// <exception cref="ArithmeticException">
+        /// If filter cannot be designed as required (but parameters are all OK).
         /// </exception>
         public static IOnlineFilter Create(OnlineFilterDesigner design, FilterDesignSettings settings)
         {
@@ -119,6 +125,9 @@ namespace Bsa.Dsp.Filters
         /// </exception>
         /// <exception cref="NotSupportedException">
         /// If specified <paramref name="design"/> does not support required filter <paramref name="type"/>.
+        /// </exception>
+        /// <exception cref="ArithmeticException">
+        /// If filter cannot be designed as required (but parameters are all OK).
         /// </exception>
         public static IOnlineFilter Create(FilterKind type, OnlineFilterDesigner design, FilterDesignSettings settings, double frequency)
         {
@@ -181,6 +190,9 @@ namespace Bsa.Dsp.Filters
         /// <exception cref="NotSupportedException">
         /// If specified <paramref name="design"/> does not support required filter <paramref name="type"/>.
         /// </exception>
+        /// <exception cref="ArithmeticException">
+        /// If filter cannot be designed as required (but parameters are all OK).
+        /// </exception>
         public static IOnlineFilter Create(FilterKind type, OnlineFilterDesigner design, FilterDesignSettings settings, Range<double> band)
         {
             ValidateSettingsWithDesigner(design, settings);
@@ -194,6 +206,8 @@ namespace Bsa.Dsp.Filters
                 return design.CreateBandPass(settings, band.Minimum, band.Maximum);
             else if (type == FilterKind.BandStop)
                 return design.CreateBandPass(settings, band.Minimum, band.Maximum);
+            else if (type == FilterKind.AllPass)
+                return design.CreateAllPass(settings, band.Minimum, band.Maximum);
 
             throw new ArgumentException("This overload can be used only to create band filters.", "type");
         }

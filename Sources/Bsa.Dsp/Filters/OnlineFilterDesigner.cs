@@ -46,12 +46,14 @@ namespace Bsa.Dsp.Filters
         /// <summary>
         /// Creates an all-pass filter.
         /// </summary>
+        /// <param name="lowFrequency">Low cutoff frequency.</param>
+        /// <param name="highFrequency">High cutoff frequency.</param>
         /// <param name="settings">Filter settings.</param>
         /// <returns>The required filter.</returns>
         /// <exception cref="NotSupportedException">
         /// This designer cannot create the required filter layout.
         /// </exception>
-        protected internal virtual IOnlineFilter CreateAllPass(FilterDesignSettings settings)
+        protected internal virtual IOnlineFilter CreateAllPass(FilterDesignSettings settings, double lowFrequency, double highFrequency)
         {
             return NotSupported();
         }

@@ -60,6 +60,8 @@
     <Compile Include="Filters\Iir\IirFilterCoefficients.cs" />
     <Compile Include="Filters\Iir\PolesAndZeros.cs" />
     <Compile Include="Filters\Iir\Polynomials.JenkinsTraub.cs" />
+    <Compile Include="Filters\Iir\BiquadFilter.cs" />
+    <Compile Include="Filters\Iir\RbjFilterDesignSettings.cs" />
     <Compile Include="Filters\Iir\SToZMappingMethod.cs" />
     <Compile Include="Mathx.cs" />
     <Compile Include="Filters\Iir\Polynomials.cs" />

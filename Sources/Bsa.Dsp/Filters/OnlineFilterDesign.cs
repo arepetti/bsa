@@ -31,7 +31,8 @@ namespace Bsa.Dsp.Filters
         public static class Iir
         {
             /// <summary>
-            /// Gets a Type I Chebyshev filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>.
+            /// Gets a Type I Chebyshev filter designer. It supports only <see cref="FilterKind.LowPass"/>, <see cref="FilterKind.HighPass"/>,
+            /// <see cref="FilterKind.BandPass"/> and <see cref="FilterKind.Notch"/>.
             /// </summary>
             /// <remarks>
             /// Filter is calculated using Fisher's method.
@@ -40,7 +41,8 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner ChebyshevI = new Bsa.Dsp.Filters.Iir.ChebyshevIOnlineFilterDesigner();
 
             /// <summary>
-            /// Gets a Type II Chebyshev filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>.
+            /// Gets a Type II Chebyshev filter designer. It supports only <see cref="FilterKind.LowPass"/>, <see cref="FilterKind.HighPass"/>,
+            /// <see cref="FilterKind.BandPass"/> and <see cref="FilterKind.Notch"/>.
             /// </summary>
             /// <remarks>
             /// Filter is calculated using Fisher's method.
@@ -49,7 +51,8 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner ChebyshevII = new Bsa.Dsp.Filters.Iir.ChebyshevIIOnlineFilterDesigner();
 
             /// <summary>
-            /// Gets a Butterworth filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>, shelf and peak filters.
+            /// Gets a Butterworth filter designer. It supports only <see cref="FilterKind.LowPass"/>, <see cref="FilterKind.HighPass"/>,
+            /// <see cref="FilterKind.BandPass"/> and <see cref="FilterKind.Notch"/>.
             /// </summary>
             /// <remarks>
             /// Fisher's method. This filter design is extremely common in EEG signal processing (especially for band-pass filters when inside
@@ -58,7 +61,8 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner Butterworth = new Bsa.Dsp.Filters.Iir.ButterworthOnlineFilterDesigner();
 
             /// <summary>
-            /// Gets a Bessel filter designer. It supports all filter types but <see cref="FilterKind.AllPass"/>, shelf and peak filters.
+            /// Gets a Bessel filter designer. It supports only <see cref="FilterKind.LowPass"/>, <see cref="FilterKind.HighPass"/>,
+            /// <see cref="FilterKind.BandPass"/> and <see cref="FilterKind.Notch"/>.
             /// </summary>
             /// <remarks>
             /// Fisher's method. This filter design is extremely common in signal processing for medical applications, especially
@@ -67,7 +71,7 @@ namespace Bsa.Dsp.Filters
             public static readonly OnlineFilterDesigner Bessel = new Bsa.Dsp.Filters.Iir.BesselOnlineFilterDesigner();
 
             /// <summary>
-            /// Gets a RBJ filter designer. It supports all filter types.
+            /// Gets a Robert Bristow-Johnson filter designer (RBJ). It supports all filter types.
             /// </summary>
             /// <remarks>
             /// Very common in some niche applications and in audio processing for building equalizers. They perform especially well,
@@ -87,7 +91,7 @@ namespace Bsa.Dsp.Filters
             /// <see cref="FilterKind.LowPass"/>, <see cref="FilterKind.HighPass"/> and <see cref="FilterKind.BandPass"/>.
             /// </summary>
             /// <remarks>
-            /// Very common and widely used implementation, decent overall performance it's multi-purpose.
+            /// Very common and multi-purpose widely used implementation, decent overall performance.
             /// </remarks>
             public static readonly OnlineFilterDesigner ParksMcClellan = new Bsa.Dsp.Filters.Fir.ParksMcClellanOnlineFilterDesigner();
         }

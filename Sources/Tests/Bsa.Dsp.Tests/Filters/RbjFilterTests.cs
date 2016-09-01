@@ -17,30 +17,18 @@
 //
 
 using System;
-using System.Numerics;
+using Bsa.Dsp.Filters;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Bsa.Dsp
+namespace Bsa.Dsp.Tests.Filters
 {
-    static class Mathx
+    [TestClass]
+    public sealed class RbjFilterTests : OnlineFilterTests
     {
-        public static double Sqr(double x)
+        [TestMethod]
+        public void Rbj()
         {
-            return x * x;
-        }
-
-        public static Complex Expj(double x)
-        {
-            return new Complex(Math.Cos(x), Math.Sin(x)); 
-        }
-
-        public static double Asinh(double x)
-        {
-            return Math.Log(x + Math.Sqrt(1 + x * x));
-        }
-
-        public static double Clip(double minimum, double maximum, double value)
-        {
-            return Math.Max(minimum, Math.Min(maximum, value));
+            TestFilter(OnlineFilterDesign.Iir.Rbj, true);
         }
     }
 }
